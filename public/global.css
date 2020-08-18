@@ -446,3 +446,9 @@ blockquote footer {
     line-height: var(--line-height);
     padding: 1.5rem 0;
 }
+
+@media only screen and (max-width: 600px) {
+  figure {
+    display: none;
+  }
+}
