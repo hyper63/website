@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: website
+    env: static
+    branch: master
+    healthCheckPlan: /
+  - type: web
+    name: website-staging
+    env: static
+    branch: staging
+    healthCheckPlan: /
