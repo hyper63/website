@@ -3,7 +3,12 @@ services:
     name: website
     env: static
     branch: master
+    buildCommand: yarn
+    staticPublishPath: ./public
+    pullRequestPreviewsEnabled: true     
   - type: web
     name: website-staging
     env: static
     branch: staging
+    buildCommand: yarn
+    staticPublishPath: ./public
