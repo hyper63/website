@@ -1,6 +1,7 @@
 ---
-title: hyper63 - a different approach to software engineering
+title: hyper63 - a different approach to software 
 date: 8/20/2020
+icon: /favicon.ico
 css: /global.css
 description: hyper63 is a software company focused on building software products that are scalable and maintainable 
 image_url: /hyper63-og.png
@@ -18,7 +19,7 @@ image_alt: hyper63 a different approach to software
 </header>
 
 <main>
-Our focus is to find an approach to software engineering that is sustainable and a joy to continue to build and maintain from day 1 to 1000. Over time, software tends to grow into a massive mess or becomes irrelevant. The "big ball of mud" is a saying when the software has built to such complexity it becomes painful to maintain. As new technology and innovation come along, so comes the desire to re-write software with these new tools.
+Our focus is to find an approach to software engineering that is sustainable and a joy to continue to build and maintain from day 1 to 1000. Over time, software tends to grow into a massive mess or becomes irrelevant. The "big ball of mud" is a saying when the software has been built to such complexity it becomes painful to maintain. As new technology and innovation come along, so comes the desire to re-write software with these new tools. 
 
 * How can we build modular software, so the parts remain simple even as the system becomes complex?
 * How can we progressively enhance software over time so that it stays relevant?
