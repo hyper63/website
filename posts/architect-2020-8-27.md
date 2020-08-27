@@ -8,9 +8,23 @@ image_url: /hyper63-og.png
 image_alt: hyper63 a different approach to software
 ---
 
+
+<header>
+  <img alt="logo" src="/hyper63-icon.svg" />
+  <br />
+  <a href="/">
+    <h1>hyper63</h1>
+  </a>
+  <h1>A <u>different</u> approach to software</h1>
+</header>
+
+<main>
+
+![Architect Logo](architect-logo-500b@2x.png)
+
 # Intro to Architect Serverless framework
 
-[Architect](https://arc.codes) is a serverless framework specifically for AWS. Architect is a lightweight and low code framework for creating and managing serverless functions within the AWS ecosystem. 
+__[Architect](https://arc.codes)__ is a serverless framework specifically for AWS. Architect is a lightweight and low code framework for creating and managing serverless functions within the AWS ecosystem. 
 
 ## Deploying a web service:
 
@@ -83,3 +97,5 @@ The Architect is a product of the OpenJS Foundation.
 ## Ok, I am interested whats next?
 
 Check out https://arc.codes for more documentation, also join the [slack community](https://join.slack.com/t/architecture-as-text/shared_invite/MjE2MzU4Nzg0NTY1LTE1MDA2NzgyMzYtODE2NzRkOGRmYw)
+
+</main>
