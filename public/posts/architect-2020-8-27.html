@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Architect Serverless framework</title>
+  <meta name="description" content="Architect is an open-source serverless framework">
+  
+  <link href="/favicon.ico" rel="icon" type="image/x-icon" >
+  
+  <link rel="stylesheet" href="/global.css">
+  <meta property="og:title" content="Architect Serverless framework">
+  <meta property="og:image" content="/hyper63-og.png">
+  <meta property="og:image:alt" content="hyper63 a different approach to software">
+  <meta property="og:description" content="Architect is an open-source serverless framework">
+  
+</head>
+
+<body>
+  <div id="wrapper">
+  <h1 id="intro-to-architect-serverless-framework">Intro to Architect Serverless framework</h1>
+<p><a href="https://arc.codes">Architect</a> is a serverless framework specifically for AWS. Architect is a lightweight and low code framework for creating and managing serverless functions within the AWS ecosystem. </p>
+<h2 id="deploying-a-web-service">Deploying a web service:</h2>
+<pre><code class="language-sh">npm install -g @architect/architect
+mkdir my-project
+cd my-project
+arc init my-project</code></pre>
+<p>edit <code>src/http/get-index/index.js</code></p>
+<pre><code>exports.handler = async function (request) {
+  return {
+    headers: { &#39;content-type&#39;: &#39;text/html; charset=utf-8;&#39;},
+    body: &#39;&lt;h1&gt;Hello World!&lt;/h1&gt;&#39;
+  }
+}</code></pre><pre><code class="language-sh">arc sandbox</code></pre>
+<pre><code>open http://localhost:3333</code></pre><p>You should see your hello world page from the serverless function.</p>
+<p>To deploy: <code>arc deploy</code> will push up to your AWS infrastructure and create an AWS gateway endpoint mapped to your AWS lambda function.</p>
+<p>Architect takes care of all the heavy infrastructure lifting of the AWS ecosystem and gives you a declarative specification file that you manage. It is called a <code>.arc</code> file, in this example, you can view your <code>app.arc</code> file created in your <code>my-project</code> directory.</p>
+<pre><code>@app
+my-project
+
+@http
+get /</code></pre><p>This example is just an introduction to Architect; you can create complex serverless systems with Architects declarative file and a collection of serverless functions.</p>
+<p>Architect currently supports the following:</p>
+<ul>
+<li>http functions</li>
+<li>websocket functions</li>
+<li>static assets/sites</li>
+<li>CDNs - content delivery networks</li>
+<li>scheduled functions - cron jobs</li>
+<li>event functions - publish/subscribe</li>
+<li>queue functions - subscribe to FIFO queue</li>
+<li>data - access nosql store for data</li>
+<li>macros - extend your cloudformation at deploy time</li>
+</ul>
+<p>These are rich, well-defined abstractions to AWS&#39;s world-class infrastructure services. Using this kind of generalization can keep your business logic loosely coupled but give you a connected developer environment without managing several moving parts. The arc <code>cli</code> supports the ability to ship to both a staging and production environment and the ability to destroy the currently provisioned infrastructure. Having the capability to drive your infrastructure via code gives you a full software dev lifecycle to your serverless system.</p>
+<h2 id="why-serverless">Why serverless?</h2>
+<p>Here are some reasons to go with a serverless architecture, immutable infrastructure that pushes state to the boundaries, cost, and scalability.</p>
+<h2 id="why-use-the-architect-framework">Why use the architect framework?</h2>
+<p>When working with serverless, it can quickly get complicated as you start to implement multiple workstreams, and you will want to focus on delivering business value, not the underneath plumbing of the infrastructure. Architect gives you a minimum viable abstraction layer that is extendable. </p>
+<p>The Architect is a product of the OpenJS Foundation. </p>
+<h2 id="ok-i-am-interested-whats-next">Ok, I am interested whats next?</h2>
+<p>Check out <a href="https://arc.codes">https://arc.codes</a> for more documentation, also join the <a href="https://join.slack.com/t/architecture-as-text/shared_invite/MjE2MzU4Nzg0NTY1LTE1MDA2NzgyMzYtODE2NzRkOGRmYw">slack community</a></p>
+
+  </div> 
+</body>
+
+</html>
