@@ -1,5 +1,5 @@
 ---
-title: Architect Serverless framework
+title: Intro to Architect Serverless framework
 date: 2020-8-27
 icon: /favicon.ico
 css: /global.css
