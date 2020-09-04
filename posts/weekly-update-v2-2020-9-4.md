@@ -113,7 +113,7 @@ https://microservices.io/
 </details>
 
 <details>
-<summary>What is a persistent layer?</summary>
+<summary>What is a persistence layer?</summary>
 
 A persistence layer is a layer in the software stack responsible for storing data for an application. Organizing applications into three common layers:
 
