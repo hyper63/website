@@ -40,7 +40,7 @@ The initial offering will include the following components:
 
 The Hubble project creates a clear boundary between application business logic and the implementation details. By using Hubble as the backend persistence services for your microservice, you will be able to focus on your business logic without having the concern of leaking business rules into the persistence layer.
 
-The Hubble project will be opensource, and you will be able to follow the development and participate in the development here:
+The Hubble project will be open source, and you will be able to follow the development and participate in the development here:
 
 <a href="https://github.com/hyper63/hubble"><img style="width: 100%" src="/hubble-banner.png" alt="hubble banner" /></a>
 
@@ -113,7 +113,7 @@ https://microservices.io/
 </details>
 
 <details>
-<summary>What is persistent layer?</summary>
+<summary>What is a persistent layer?</summary>
 
 A persistence layer is a layer in the software stack responsible for storing data for an application. Organizing applications into three common layers:
 
