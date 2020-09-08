@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Typescript tsc for JS</title>
+  <meta name="description" content="Typecheck your JS using typescript and JSDocs">
+  
+  <link href="/favicon.ico" rel="icon" type="image/x-icon" >
+  
+  <link rel="stylesheet" href="/global.css">
+  <meta property="og:title" content="Typescript tsc for JS">
+  <meta property="og:image" content="/hyper63-og.png">
+  <meta property="og:image:alt" content="hyper63 a different approach to software">
+  <meta property="og:description" content="Typecheck your JS using typescript and JSDocs">
+  
+</head>
+
+<body>
+  <div id="wrapper">
+  <header>
+  <img alt="logo" src="/hyper63-icon.svg" />
+  <br />
+  <a href="/">
+    <h1>hyper63</h1>
+  </a>
+  <h1>A <u>different</u> approach to software</h1>
+</header>
+
+<main style="font-size: 1.6em;color: rgba(0,0,0,.8)">
+
+<h1 id="ts-for-js">TS for JS</h1>
+<div style="display: flex; justify-content: flex-end">
+
+<p>Tom Wilson<br>9/8/2020</p>
+</div>
+
+<p>Typecheck your JS files with Typescript</p>
+<blockquote>
+<p>I have been working with JS for 20 years and for all of its challenges, I love the language, I also see the benefits of typescript. This approach allows me to continue to write JS and leverage the basics of the typescript checker.</p>
+</blockquote>
+<p>Typescripts <code>tsc</code> is the typescript compiler and type checker. Based on your <code>tsconfig.json</code> or your command flags it finds your typescript files and typechecks the files then compiles them into JS. You can install the command by running <code>npm i -g typescript</code>. You can also run <code>tsc</code> against JS files, typechecking JS files is what this post is about.</p>
+<p>Using a compiler flags you can configure <code>tsc</code> to <code>allowJs</code> and <code>checkJs</code>, these two flags instruct the <code>tsc</code> application to typecheck JS files. You can also add the <code>noEmit</code> and <code>strict</code> compiler options to have <code>tsc</code> not compile and to use strict type checking. </p>
+<p>How do you specify types in JS? JS is a dynamically typed language so there is no built in way to describe types. But there is a specification called <code>JSDocs</code>, this specification can be used to describe your JS syntax with types and descriptions. JSDocs is built to generate documentation for your source code while keeping the documentation close to the implementation details. Editors like vscode use JSDocs and typescript to generate help hints and autocompletion in the editor. We can use JSDocs to specify types in our JS and then run the <code>tsc</code> command to check those types.  </p>
+<h2 id="why-we-have-typescript">Why? (We have typescript!)</h2>
+<p>So you maybe asking why do this? Why not just write typescript? That is a great question. I think some reasons for the &quot;why&quot; could be, that you have a legacy JS library and instead of converting it to typescript, you may just want to add type checking for the shared library. For me, I love JS, but I want to get the awesome features of typescript. </p>
+<p>Other reasons could be the added complexity when incorporating TS into projects and keeping up with the ever changing best practices for both client and server side. I am not exactly sure why, but sticking with JS feels right to me and having strict typechecking also feels right. </p>
+<h2 id="how-do-you-setup-tsc-for-js-in-your-project">How do you setup tsc for JS in your project?</h2>
+<blockquote>
+<p>Great, I have convinced you to give typechecking in your JS a try, and now you want to set it up in your project.</p>
+</blockquote>
+<h3 id="install-typescript">Install typescript</h3>
+<p>The first thing you will want to do is install typescript into your project using your devDependencies.</p>
+<pre><code class="language-sh">yarn add -D typescript</code></pre>
+<p>or</p>
+<pre><code class="language-sh">npm i typescript --save-dev</code></pre>
+<h3 id="create-config-file">Create config file</h3>
+<p>Now that you have typescript installed in your project, you need a tsconfig.json file.</p>
+<p>tsconfig.json</p>
+<pre><code class="language-json">{
+  &quot;compilerOptions&quot;: {
+    &quot;checkJs&quot;: true,
+    &quot;allowJs&quot;: true,
+    &quot;noEmit&quot;: true,
+    &quot;strict&quot;: true
+  },
+  &quot;include&quot;: [
+    &quot;src/**/*&quot;
+  ],
+  &quot;exclude&quot;: [
+    &quot;node_modules&quot;
+  ]
+}</code></pre>
+<p>These compiler options tells the <code>tsc</code> application to typecheck JS files stricly and do not emit or compile any output. You can find out more information about compiler options here: <a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html">https://www.typescriptlang.org/docs/handbook/compiler-options.html</a></p>
+<h3 id="configure-tsc-to-run-via-npm-scripts">Configure tsc to run via npm scripts</h3>
+<p>In your package.json file, in the scripts section create a script to perform your type checking.</p>
+<p>package.json</p>
+<pre><code class="language-json">{
+  ...
+  &quot;scripts&quot;: {
+    ...
+    &quot;check&quot;: &quot;tsc&quot;
+  }
+}</code></pre>
+<p>Now you can run typescript type checking against your JS files:</p>
+<pre><code class="language-sh">yarn check</code></pre>
+<p>or</p>
+<pre><code class="language-sh">npm run check</code></pre>
+<h3 id="how-to-use-checking-in-js">How to use checking in JS</h3>
+<blockquote>
+<p>Typescript JSDoc Reference - <a href="https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html">https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html</a></p>
+</blockquote>
+<p>By using JSDocs in your JS you can leverage the typechecker capabilities of typescript in JS.</p>
+<pre><code class="language-js">
+/** @type {number} */
+let x
+
+/** @type {string} */
+let y
+
+/** @type {PromiseLike&lt;string&gt;}
+let promisedString
+</code></pre>
+<p>You can also do union types</p>
+<pre><code class="language-js">/** @type {string | boolean} */
+let sb</code></pre>
+<p>You can specify array types</p>
+<pre><code class="language-js">/** @type {number[]} */
+let xs</code></pre>
+<p>You can specify object literal types</p>
+<pre><code class="language-js">/** @type {{from: string, to: string, subject: string, body: string, published: boolean}} */
+let email</code></pre>
+<p>You can import types from other files</p>
+<pre><code class="language-js">/**
+ * @typedef { import(&quot;./subscription&quot;).Subscription } Subscription
+ */
+
+/**
+ * @type {Subscription}
+ */
+let subscription</code></pre>
+<p>You can define your function parameters and their return values</p>
+<pre><code class="language-js">/**
+ * @param {string} email - email address
+ * @param {boolean} registered - subscribed
+ * @returns {PromiseLike&lt;Subscription&gt;}
+ */
+function createSubscription(email, registered) {
+  ...
+}</code></pre>
+<p>You can use <code>@typedef</code> to define complex object types</p>
+<pre><code class="language-js">/**
+ * @typedef {object} EmailDocument
+ * @property {string} to - receivers email address
+ * @property {string} from - senders email address
+ * @property {string} subject - email subject
+ * @property {string} body - email content
+ * @property {boolean} [sent] - was email sent
+ */
+
+/** @type {EmailDocument} */
+let emailDoc
+</code></pre>
+<blockquote>
+<p>Square brackets around a property name indicates that property is optional.</p>
+</blockquote>
+<p>You can use <code>@callback</code> like <code>@typedef</code> to specify a function type</p>
+<pre><code>/**
+ * @callback Predicate
+ * @param {string} data
+ * @param {number} [index]
+ * @returns {boolean}
+ */
+
+/** @type {Predicate} */
+const ok = (s) =&gt; !(s.length % 2);</code></pre><p>Sometimes when working with third-party libraries their may not be types available, in those cases you can tell typescript to ignore those lines:</p>
+<pre><code class="language-js">/** @ts-ignore */
+const uuid = require(&#39;uuid&#39;).v4</code></pre>
+<p>There are many more, check out <a href="https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html">https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html</a> for more supported examples.</p>
+<p>It is important to note, that there are patterns that are not supported.</p>
+<p><a href="https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#patterns-that-are-known-not-to-be-supported">https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#patterns-that-are-known-not-to-be-supported</a></p>
+<h3 id="try-it-out">Try it out</h3>
+<p>If you would like to try this out, I have created a glitch environment you can remix and run the project yourself, the project contains type errors that you have fix using JSDocs. It also contains an answer file, so if you get stuck, you can peak over to that file and figure out what is going on.</p>
+<p><a href="https://glitch.com/edit/#!/ts4js-examples">https://glitch.com/edit/#!/ts4js-examples</a></p>
+<h2 id="summary">Summary</h2>
+<p>In this article, you learned about how to use typescript on your JS files using JSDoc. JSDoc and typescript are powerful proven tools to help you write JS, using these tools can prevent bugs as well as provide solid documentation to your projects. JSDocs can give you a lot of the basics of typechecking without the hassle of compilation.</p>
+<p>If you find any errors in this article please post an issue here:</p>
+<p><a href="https://github.com/hyper63/website/issues">https://github.com/hyper63/website/issues</a></p>
+<h2 id="more-resources">More Resources</h2>
+<ul>
+<li><a href="https://devhints.io/jsdoc">Cheatsheet for JSDocs</a></li>
+<li><a href="https://fettblog.eu/typescript-jsdoc-superpowers/">typescript-jsdoc-superpowers</a></li>
+<li><a href="https://www.typescriptlang.org/docs/handbook/type-checking-javascript-files.html#supported-jsdoc">Typechecking JS Files</a></li>
+<li><a href="https://flaviocopes.com/how-to-check-types-javascript/">How to check types in JS</a></li>
+</ul>
+<h2 id="thank-you">Thank you</h2>
+<p>Thank you for reading this article, if you are interesting in following <a href="https://hyper63.com">hyper63</a> fill out the form below.</p>
+</main>
+
+<footer style="display: flex;flex-direction: column;align-items:center">
+  <p>Subscribe to receive updates</p>
+
+  <style>
+    .gumroad-follow-form-embed {
+      zoom: 1;
+    }
+
+    .gumroad-follow-form-embed:before,
+    .gumroad-follow-form-embed:after {
+      display: table;
+      line-height: 0;
+      content: "";
+    }
+
+    .gumroad-follow-form-embed:after {
+      clear: both;
+    }
+
+    .gumroad-follow-form-embed * {
+      margin: 0;
+      border: 0;
+      padding: 0;
+      outline: 0;
+      box-sizing: border-box !important;
+      float: left !important;
+    }
+
+    .gumroad-follow-form-embed input {
+      border-radius: 4px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      font-family: -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 15px;
+      line-height: 20px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-right: 0;
+      color: #aaa;
+      padding: 10px;
+      box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.02);
+      background-position: top right;
+      background-repeat: no-repeat;
+      text-rendering: optimizeLegibility;
+      font-smoothing: antialiased;
+      -webkit-appearance: none;
+      -moz-appearance: caret;
+      width: 65% !important;
+      height: 40px !important;
+    }
+
+    .gumroad-follow-form-embed button {
+      border-radius: 4px;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+      -webkit-transition: all .05s ease-in-out;
+      transition: all .05s ease-in-out;
+      display: inline-block;
+      padding: 11px 15px 12px;
+      cursor: pointer;
+      color: #fff;
+      font-size: 15px;
+      line-height: 100%;
+      font-family: -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: #36a9ae;
+      border: 1px solid #31989d;
+      filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#5ccfd4, endColorstr=#329ca1, GradientType=0)";
+      background: -webkit-linear-gradient(#5ccfd4, #329ca1);
+      background: linear-gradient(to bottom, #5ccfd4, #329ca1);
+      height: 40px !important;
+      width: 35% !important;
+    }
+  </style>
+  <form action="https://gumroad.com/follow_from_embed_form" class="form gumroad-follow-form-embed"
+    method="post"> <input name="seller_id" type="hidden" value="6457209038237"> <input name="email" placeholder="Your email address" type="email">
+    <button data-custom-highlight-color="" type="submit">Follow</button> </form>
+  <p>or follow us on twitter</p>
+  <a href="https://twitter.com/hyper632?ref_src=twsrc%5Etfw" class="twitter-follow-button"
+    data-show-count="false">Follow @hyper632</a>
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</footer>
+
+
+  </div> 
+</body>
+
+</html>
