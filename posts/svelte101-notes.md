@@ -1390,6 +1390,6 @@ October 29 and 30 from 2pm - 5pm EST
 
 This is a 6 hour immersive workshop split into two three hour sessions for two days. The workshop will cover server-side rendering, code-splitting, client/server semantics, dynamic imports, tailwind basics, setting up tailwind with sapper, postcss, and more. By the end of this workshop you will be prepared to create scalable and performant web applications with joy.
 
-Register here:
+The registration will be posted shortly.
 
 </main>
