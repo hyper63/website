@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from 'svelte'
+  import { onMount, tick } from 'svelte'
   import Modal from './components/Modal.svelte'
 
   let stripe = Stripe('pk_test_51HUW8YCdTeU3dtdYIiHByOYhIBsqLN9ImmkfOkbZ1AcIWxQbrVMtfyzqlakNzdVHnlYTU1WXqv52o0fbXKcqFemW00Ig3U26Is')
@@ -8,23 +8,14 @@
   export let amount
   export let name
 
-  let result
+  let success = false
 
   onMount(() => {
     const params = new URLSearchParams(window.location.search)
-    result = params.get('checkout') === 'success'
-  
-    if (result) {
- //     alert('Successfully Registered!')
+    if (params.get('checkout') === 'success') {
       //window.location.replace('/sapper-workshop')
+      success = true
     }
-    /*
-    if (result === 'error') {
-      alert('Error occured while trying to register!')
-      
-      window.location.replace('/sapper-workshop')
-    }
-    */
   })
 
   async function startCheckout() {
@@ -38,6 +29,11 @@
     if (error) {
       alert('our payment system is broken')
     }
+  }
+
+  function closeModal() {
+    success = false
+    window.location.replace('/sapper-workshop')
   }
 </script>
 
@@ -56,7 +52,7 @@
     </figure>
   </header>
   <main>
-    <button on:click={startCheckout} style="float: right">Register: $100</button>
+    <button disabled={success} on:click={startCheckout} style="float: right">Register: $100</button>
   <h1>Sapper + TailwindCSS Workshop</h1>
   <p>October 29 and 30 from 10am to 1pm EST each day</p>
 
@@ -152,7 +148,7 @@
 
   </main>
 </div>
-<Modal open={result}>
+<Modal open={success}>
   <div>
     <h1> 🎉 🎉 Success! 🎉 🎉</h1>
     <h3>Sapper + Tailwind CSS Workshop Registration Complete</h3>
@@ -160,7 +156,7 @@
     <p>You will recieve a receipt in your inbox shortly. And on October 28, you will receive information on how to join the workshop to participate.</p>
     <p>If you have any questions, please email <a href="mailto:workshops@hyper63.com">workshops@hyper63.com</a></p>
     <p>Thank you! We are looking forward to the workshop!</p>
-    <button on:click={() => result = false}>Close</button>
+    <button on:click={closeModal}>Close</button>
   </div>
 </Modal>
 

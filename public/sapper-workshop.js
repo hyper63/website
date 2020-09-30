@@ -819,7 +819,7 @@ var sapperWorkshop = (function () {
     			append(div, button);
 
     			if (!mounted) {
-    				dispose = listen(button, "click", /*click_handler*/ ctx[5]);
+    				dispose = listen(button, "click", /*closeModal*/ ctx[2]);
     				mounted = true;
     			}
     		},
@@ -842,6 +842,7 @@ var sapperWorkshop = (function () {
     	let t8;
     	let main;
     	let button;
+    	let t9;
     	let t10;
     	let h1;
     	let t12;
@@ -878,7 +879,7 @@ var sapperWorkshop = (function () {
 
     	modal = new Modal({
     			props: {
-    				open: /*result*/ ctx[0],
+    				open: /*success*/ ctx[0],
     				$$slots: { default: [create_default_slot] },
     				$$scope: { ctx }
     			}
@@ -902,7 +903,7 @@ var sapperWorkshop = (function () {
     			t8 = space();
     			main = element("main");
     			button = element("button");
-    			button.textContent = "Register: $100";
+    			t9 = text("Register: $100");
     			t10 = space();
     			h1 = element("h1");
     			h1.textContent = "Sapper + TailwindCSS Workshop";
@@ -984,6 +985,7 @@ var sapperWorkshop = (function () {
 
     			t93 = space();
     			create_component(modal.$$.fragment);
+    			button.disabled = /*success*/ ctx[0];
     			set_style(button, "float", "right");
     			set_style(section2, "display", "flex");
     			set_style(section2, "flex-direction", "row");
@@ -998,6 +1000,7 @@ var sapperWorkshop = (function () {
     			append(div, t8);
     			append(div, main);
     			append(main, button);
+    			append(button, t9);
     			append(main, t10);
     			append(main, h1);
     			append(main, t12);
@@ -1040,10 +1043,14 @@ var sapperWorkshop = (function () {
     			}
     		},
     		p(ctx, [dirty]) {
-    			const modal_changes = {};
-    			if (dirty & /*result*/ 1) modal_changes.open = /*result*/ ctx[0];
+    			if (!current || dirty & /*success*/ 1) {
+    				button.disabled = /*success*/ ctx[0];
+    			}
 
-    			if (dirty & /*$$scope, result*/ 129) {
+    			const modal_changes = {};
+    			if (dirty & /*success*/ 1) modal_changes.open = /*success*/ ctx[0];
+
+    			if (dirty & /*$$scope*/ 128) {
     				modal_changes.$$scope = { dirty, ctx };
     			}
 
@@ -1073,19 +1080,16 @@ var sapperWorkshop = (function () {
     	let { sku } = $$props;
     	let { amount } = $$props;
     	let { name } = $$props;
-    	let result;
+    	let success = false;
 
     	onMount(() => {
     		const params = new URLSearchParams(window.location.search);
-    		$$invalidate(0, result = params.get("checkout") === "success");
-    		//window.location.replace('/sapper-workshop')
-    	}); /*
-    if (result === 'error') {
-      alert('Error occured while trying to register!')
-      
-      window.location.replace('/sapper-workshop')
-    }
-    */
+
+    		if (params.get("checkout") === "success") {
+    			//window.location.replace('/sapper-workshop')
+    			$$invalidate(0, success = true);
+    		}
+    	});
 
     	async function startCheckout() {
     		const { error } = await stripe.redirectToCheckout({
@@ -1105,21 +1109,24 @@ var sapperWorkshop = (function () {
     		}
     	}
 
-    	const click_handler = () => $$invalidate(0, result = false);
+    	function closeModal() {
+    		$$invalidate(0, success = false);
+    		window.location.replace("/sapper-workshop");
+    	}
 
     	$$self.$$set = $$props => {
-    		if ("sku" in $$props) $$invalidate(2, sku = $$props.sku);
-    		if ("amount" in $$props) $$invalidate(3, amount = $$props.amount);
-    		if ("name" in $$props) $$invalidate(4, name = $$props.name);
+    		if ("sku" in $$props) $$invalidate(3, sku = $$props.sku);
+    		if ("amount" in $$props) $$invalidate(4, amount = $$props.amount);
+    		if ("name" in $$props) $$invalidate(5, name = $$props.name);
     	};
 
-    	return [result, startCheckout, sku, amount, name, click_handler];
+    	return [success, startCheckout, closeModal, sku, amount, name];
     }
 
     class App extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$1, create_fragment$1, safe_not_equal, { sku: 2, amount: 3, name: 4 });
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, { sku: 3, amount: 4, name: 5 });
     	}
     }
 
