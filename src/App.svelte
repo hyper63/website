@@ -2,11 +2,8 @@
   import { onMount, tick } from 'svelte'
   import Modal from './components/Modal.svelte'
 
-  let stripe = Stripe('pk_test_51HUW8YCdTeU3dtdYIiHByOYhIBsqLN9ImmkfOkbZ1AcIWxQbrVMtfyzqlakNzdVHnlYTU1WXqv52o0fbXKcqFemW00Ig3U26Is')
-
-  export let sku
-  export let amount
-  export let name
+  //let stripe = Stripe('pk_test_51HUW8YCdTeU3dtdYIiHByOYhIBsqLN9ImmkfOkbZ1AcIWxQbrVMtfyzqlakNzdVHnlYTU1WXqv52o0fbXKcqFemW00Ig3U26Is')
+  let stripe = Stripe('pk_live_51HUW8YCdTeU3dtdYnYrJyb6F7TYLWWtNk6vHov8Q06cQ2hDKaNqhbI2mGjPcQqN7PjxQn2rhCEhmOaIVeAlPPiVV001vP95oUK')
 
   let success = false
 
@@ -20,7 +17,8 @@
 
   async function startCheckout() {
     const { error } = await stripe.redirectToCheckout({
-      lineItems: [{price: 'price_1HWph3CdTeU3dtdYoULHTDCw', quantity: 1}],
+      // test lineItems: [{price: 'price_1HWph3CdTeU3dtdYoULHTDCw', quantity: 1}],
+      lineItems: [{ price: 'price_1HXBu9CdTeU3dtdYKEV46A0m', quantity: 1}],
       mode: 'payment',
       successUrl: window.location.origin + '/sapper-workshop?checkout=success',
       cancelUrl: window.location.origin + '/sapper-workshop?checkout=error'

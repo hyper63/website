@@ -1050,7 +1050,7 @@ var sapperWorkshop = (function () {
     			const modal_changes = {};
     			if (dirty & /*success*/ 1) modal_changes.open = /*success*/ ctx[0];
 
-    			if (dirty & /*$$scope*/ 128) {
+    			if (dirty & /*$$scope*/ 16) {
     				modal_changes.$$scope = { dirty, ctx };
     			}
 
@@ -1076,10 +1076,7 @@ var sapperWorkshop = (function () {
     }
 
     function instance$1($$self, $$props, $$invalidate) {
-    	let stripe = Stripe("pk_test_51HUW8YCdTeU3dtdYIiHByOYhIBsqLN9ImmkfOkbZ1AcIWxQbrVMtfyzqlakNzdVHnlYTU1WXqv52o0fbXKcqFemW00Ig3U26Is");
-    	let { sku } = $$props;
-    	let { amount } = $$props;
-    	let { name } = $$props;
+    	let stripe = Stripe("pk_live_51HUW8YCdTeU3dtdYnYrJyb6F7TYLWWtNk6vHov8Q06cQ2hDKaNqhbI2mGjPcQqN7PjxQn2rhCEhmOaIVeAlPPiVV001vP95oUK");
     	let success = false;
 
     	onMount(() => {
@@ -1093,9 +1090,10 @@ var sapperWorkshop = (function () {
 
     	async function startCheckout() {
     		const { error } = await stripe.redirectToCheckout({
+    			// test lineItems: [{price: 'price_1HWph3CdTeU3dtdYoULHTDCw', quantity: 1}],
     			lineItems: [
     				{
-    					price: "price_1HWph3CdTeU3dtdYoULHTDCw",
+    					price: "price_1HXBu9CdTeU3dtdYKEV46A0m",
     					quantity: 1
     				}
     			],
@@ -1114,19 +1112,13 @@ var sapperWorkshop = (function () {
     		window.location.replace("/sapper-workshop");
     	}
 
-    	$$self.$$set = $$props => {
-    		if ("sku" in $$props) $$invalidate(3, sku = $$props.sku);
-    		if ("amount" in $$props) $$invalidate(4, amount = $$props.amount);
-    		if ("name" in $$props) $$invalidate(5, name = $$props.name);
-    	};
-
-    	return [success, startCheckout, closeModal, sku, amount, name];
+    	return [success, startCheckout, closeModal];
     }
 
     class App extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$1, create_fragment$1, safe_not_equal, { sku: 3, amount: 4, name: 5 });
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, {});
     	}
     }
 
