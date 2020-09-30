@@ -2,6 +2,13 @@ var sapperWorkshop = (function () {
     'use strict';
 
     function noop() { }
+    const identity = x => x;
+    function assign(tar, src) {
+        // @ts-ignore
+        for (const k in src)
+            tar[k] = src[k];
+        return tar;
+    }
     function run(fn) {
         return fn();
     }
@@ -19,6 +26,80 @@ var sapperWorkshop = (function () {
     }
     function is_empty(obj) {
         return Object.keys(obj).length === 0;
+    }
+    function create_slot(definition, ctx, $$scope, fn) {
+        if (definition) {
+            const slot_ctx = get_slot_context(definition, ctx, $$scope, fn);
+            return definition[0](slot_ctx);
+        }
+    }
+    function get_slot_context(definition, ctx, $$scope, fn) {
+        return definition[1] && fn
+            ? assign($$scope.ctx.slice(), definition[1](fn(ctx)))
+            : $$scope.ctx;
+    }
+    function get_slot_changes(definition, $$scope, dirty, fn) {
+        if (definition[2] && fn) {
+            const lets = definition[2](fn(dirty));
+            if ($$scope.dirty === undefined) {
+                return lets;
+            }
+            if (typeof lets === 'object') {
+                const merged = [];
+                const len = Math.max($$scope.dirty.length, lets.length);
+                for (let i = 0; i < len; i += 1) {
+                    merged[i] = $$scope.dirty[i] | lets[i];
+                }
+                return merged;
+            }
+            return $$scope.dirty | lets;
+        }
+        return $$scope.dirty;
+    }
+    function update_slot(slot, slot_definition, ctx, $$scope, dirty, get_slot_changes_fn, get_slot_context_fn) {
+        const slot_changes = get_slot_changes(slot_definition, $$scope, dirty, get_slot_changes_fn);
+        if (slot_changes) {
+            const slot_context = get_slot_context(slot_definition, ctx, $$scope, get_slot_context_fn);
+            slot.p(slot_context, slot_changes);
+        }
+    }
+    function action_destroyer(action_result) {
+        return action_result && is_function(action_result.destroy) ? action_result.destroy : noop;
+    }
+
+    const is_client = typeof window !== 'undefined';
+    let now = is_client
+        ? () => window.performance.now()
+        : () => Date.now();
+    let raf = is_client ? cb => requestAnimationFrame(cb) : noop;
+
+    const tasks = new Set();
+    function run_tasks(now) {
+        tasks.forEach(task => {
+            if (!task.c(now)) {
+                tasks.delete(task);
+                task.f();
+            }
+        });
+        if (tasks.size !== 0)
+            raf(run_tasks);
+    }
+    /**
+     * Creates a new task that runs on each raf frame
+     * until it returns a falsy value or is aborted
+     */
+    function loop(callback) {
+        let task;
+        if (tasks.size === 0)
+            raf(run_tasks);
+        return {
+            promise: new Promise(fulfill => {
+                tasks.add(task = { c: callback, f: fulfill });
+            }),
+            abort() {
+                tasks.delete(task);
+            }
+        };
     }
 
     function append(target, node) {
@@ -39,9 +120,18 @@ var sapperWorkshop = (function () {
     function space() {
         return text(' ');
     }
+    function empty() {
+        return text('');
+    }
     function listen(node, event, handler, options) {
         node.addEventListener(event, handler, options);
         return () => node.removeEventListener(event, handler, options);
+    }
+    function attr(node, attribute, value) {
+        if (value == null)
+            node.removeAttribute(attribute);
+        else if (node.getAttribute(attribute) !== value)
+            node.setAttribute(attribute, value);
     }
     function children(element) {
         return Array.from(element.childNodes);
@@ -49,10 +139,84 @@ var sapperWorkshop = (function () {
     function set_style(node, key, value, important) {
         node.style.setProperty(key, value, important ? 'important' : '');
     }
+    function custom_event(type, detail) {
+        const e = document.createEvent('CustomEvent');
+        e.initCustomEvent(type, false, false, detail);
+        return e;
+    }
+
+    const active_docs = new Set();
+    let active = 0;
+    // https://github.com/darkskyapp/string-hash/blob/master/index.js
+    function hash(str) {
+        let hash = 5381;
+        let i = str.length;
+        while (i--)
+            hash = ((hash << 5) - hash) ^ str.charCodeAt(i);
+        return hash >>> 0;
+    }
+    function create_rule(node, a, b, duration, delay, ease, fn, uid = 0) {
+        const step = 16.666 / duration;
+        let keyframes = '{\n';
+        for (let p = 0; p <= 1; p += step) {
+            const t = a + (b - a) * ease(p);
+            keyframes += p * 100 + `%{${fn(t, 1 - t)}}\n`;
+        }
+        const rule = keyframes + `100% {${fn(b, 1 - b)}}\n}`;
+        const name = `__svelte_${hash(rule)}_${uid}`;
+        const doc = node.ownerDocument;
+        active_docs.add(doc);
+        const stylesheet = doc.__svelte_stylesheet || (doc.__svelte_stylesheet = doc.head.appendChild(element('style')).sheet);
+        const current_rules = doc.__svelte_rules || (doc.__svelte_rules = {});
+        if (!current_rules[name]) {
+            current_rules[name] = true;
+            stylesheet.insertRule(`@keyframes ${name} ${rule}`, stylesheet.cssRules.length);
+        }
+        const animation = node.style.animation || '';
+        node.style.animation = `${animation ? `${animation}, ` : ``}${name} ${duration}ms linear ${delay}ms 1 both`;
+        active += 1;
+        return name;
+    }
+    function delete_rule(node, name) {
+        const previous = (node.style.animation || '').split(', ');
+        const next = previous.filter(name
+            ? anim => anim.indexOf(name) < 0 // remove specific animation
+            : anim => anim.indexOf('__svelte') === -1 // remove all Svelte animations
+        );
+        const deleted = previous.length - next.length;
+        if (deleted) {
+            node.style.animation = next.join(', ');
+            active -= deleted;
+            if (!active)
+                clear_rules();
+        }
+    }
+    function clear_rules() {
+        raf(() => {
+            if (active)
+                return;
+            active_docs.forEach(doc => {
+                const stylesheet = doc.__svelte_stylesheet;
+                let i = stylesheet.cssRules.length;
+                while (i--)
+                    stylesheet.deleteRule(i);
+                doc.__svelte_rules = {};
+            });
+            active_docs.clear();
+        });
+    }
 
     let current_component;
     function set_current_component(component) {
         current_component = component;
+    }
+    function get_current_component() {
+        if (!current_component)
+            throw new Error(`Function called outside component initialization`);
+        return current_component;
+    }
+    function onMount(fn) {
+        get_current_component().$$.on_mount.push(fn);
     }
 
     const dirty_components = [];
@@ -118,12 +282,178 @@ var sapperWorkshop = (function () {
             $$.after_update.forEach(add_render_callback);
         }
     }
+
+    let promise;
+    function wait() {
+        if (!promise) {
+            promise = Promise.resolve();
+            promise.then(() => {
+                promise = null;
+            });
+        }
+        return promise;
+    }
+    function dispatch(node, direction, kind) {
+        node.dispatchEvent(custom_event(`${direction ? 'intro' : 'outro'}${kind}`));
+    }
     const outroing = new Set();
+    let outros;
+    function group_outros() {
+        outros = {
+            r: 0,
+            c: [],
+            p: outros // parent group
+        };
+    }
+    function check_outros() {
+        if (!outros.r) {
+            run_all(outros.c);
+        }
+        outros = outros.p;
+    }
     function transition_in(block, local) {
         if (block && block.i) {
             outroing.delete(block);
             block.i(local);
         }
+    }
+    function transition_out(block, local, detach, callback) {
+        if (block && block.o) {
+            if (outroing.has(block))
+                return;
+            outroing.add(block);
+            outros.c.push(() => {
+                outroing.delete(block);
+                if (callback) {
+                    if (detach)
+                        block.d(1);
+                    callback();
+                }
+            });
+            block.o(local);
+        }
+    }
+    const null_transition = { duration: 0 };
+    function create_in_transition(node, fn, params) {
+        let config = fn(node, params);
+        let running = false;
+        let animation_name;
+        let task;
+        let uid = 0;
+        function cleanup() {
+            if (animation_name)
+                delete_rule(node, animation_name);
+        }
+        function go() {
+            const { delay = 0, duration = 300, easing = identity, tick = noop, css } = config || null_transition;
+            if (css)
+                animation_name = create_rule(node, 0, 1, duration, delay, easing, css, uid++);
+            tick(0, 1);
+            const start_time = now() + delay;
+            const end_time = start_time + duration;
+            if (task)
+                task.abort();
+            running = true;
+            add_render_callback(() => dispatch(node, true, 'start'));
+            task = loop(now => {
+                if (running) {
+                    if (now >= end_time) {
+                        tick(1, 0);
+                        dispatch(node, true, 'end');
+                        cleanup();
+                        return running = false;
+                    }
+                    if (now >= start_time) {
+                        const t = easing((now - start_time) / duration);
+                        tick(t, 1 - t);
+                    }
+                }
+                return running;
+            });
+        }
+        let started = false;
+        return {
+            start() {
+                if (started)
+                    return;
+                delete_rule(node);
+                if (is_function(config)) {
+                    config = config();
+                    wait().then(go);
+                }
+                else {
+                    go();
+                }
+            },
+            invalidate() {
+                started = false;
+            },
+            end() {
+                if (running) {
+                    cleanup();
+                    running = false;
+                }
+            }
+        };
+    }
+    function create_out_transition(node, fn, params) {
+        let config = fn(node, params);
+        let running = true;
+        let animation_name;
+        const group = outros;
+        group.r += 1;
+        function go() {
+            const { delay = 0, duration = 300, easing = identity, tick = noop, css } = config || null_transition;
+            if (css)
+                animation_name = create_rule(node, 1, 0, duration, delay, easing, css);
+            const start_time = now() + delay;
+            const end_time = start_time + duration;
+            add_render_callback(() => dispatch(node, false, 'start'));
+            loop(now => {
+                if (running) {
+                    if (now >= end_time) {
+                        tick(0, 1);
+                        dispatch(node, false, 'end');
+                        if (!--group.r) {
+                            // this will result in `end()` being called,
+                            // so we don't need to clean up here
+                            run_all(group.c);
+                        }
+                        return false;
+                    }
+                    if (now >= start_time) {
+                        const t = easing((now - start_time) / duration);
+                        tick(1 - t, t);
+                    }
+                }
+                return running;
+            });
+        }
+        if (is_function(config)) {
+            wait().then(() => {
+                // @ts-ignore
+                config = config();
+                go();
+            });
+        }
+        else {
+            go();
+        }
+        return {
+            end(reset) {
+                if (reset && config.tick) {
+                    config.tick(1, 0);
+                }
+                if (running) {
+                    if (animation_name)
+                        delete_rule(node, animation_name);
+                    running = false;
+                }
+            }
+        };
+    }
+    function create_component(block) {
+        block && block.c();
     }
     function mount_component(component, target, anchor) {
         const { fragment, on_mount, on_destroy, after_update } = component.$$;
@@ -244,12 +574,270 @@ var sapperWorkshop = (function () {
         }
     }
 
-    /* src/App.svelte generated by Svelte v3.28.0 */
+    function cubicOut(t) {
+        const f = t - 1.0;
+        return f * f * f + 1.0;
+    }
+
+    function scale(node, { delay = 0, duration = 400, easing = cubicOut, start = 0, opacity = 0 }) {
+        const style = getComputedStyle(node);
+        const target_opacity = +style.opacity;
+        const transform = style.transform === 'none' ? '' : style.transform;
+        const sd = 1 - start;
+        const od = target_opacity * (1 - opacity);
+        return {
+            delay,
+            duration,
+            easing,
+            css: (_t, u) => `
+			transform: ${transform} scale(${1 - (sd * u)});
+			opacity: ${target_opacity - (od * u)}
+		`
+        };
+    }
+
+    /* src/components/Modal.svelte generated by Svelte v3.28.0 */
+
+    function create_if_block(ctx) {
+    	let div;
+    	let section;
+    	let aside;
+    	let aside_intro;
+    	let aside_outro;
+    	let modalAction_action;
+    	let current;
+    	let mounted;
+    	let dispose;
+    	const default_slot_template = /*#slots*/ ctx[2].default;
+    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[1], null);
+
+    	return {
+    		c() {
+    			div = element("div");
+    			section = element("section");
+    			aside = element("aside");
+    			if (default_slot) default_slot.c();
+    			attr(aside, "class", "svelte-163fgjc");
+    			attr(section, "class", "svelte-163fgjc");
+    			attr(div, "class", "modal svelte-163fgjc");
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    			append(div, section);
+    			append(section, aside);
+
+    			if (default_slot) {
+    				default_slot.m(aside, null);
+    			}
+
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = action_destroyer(modalAction_action = modalAction.call(null, div));
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (default_slot) {
+    				if (default_slot.p && dirty & /*$$scope*/ 2) {
+    					update_slot(default_slot, default_slot_template, ctx, /*$$scope*/ ctx[1], dirty, null, null);
+    				}
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(default_slot, local);
+
+    			add_render_callback(() => {
+    				if (aside_outro) aside_outro.end(1);
+    				if (!aside_intro) aside_intro = create_in_transition(aside, scale, {});
+    				aside_intro.start();
+    			});
+
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(default_slot, local);
+    			if (aside_intro) aside_intro.invalidate();
+    			aside_outro = create_out_transition(aside, scale, { duration: 500 });
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div);
+    			if (default_slot) default_slot.d(detaching);
+    			if (detaching && aside_outro) aside_outro.end();
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
 
     function create_fragment(ctx) {
+    	let if_block_anchor;
+    	let current;
+    	let if_block = /*open*/ ctx[0] && create_if_block(ctx);
+
+    	return {
+    		c() {
+    			if (if_block) if_block.c();
+    			if_block_anchor = empty();
+    		},
+    		m(target, anchor) {
+    			if (if_block) if_block.m(target, anchor);
+    			insert(target, if_block_anchor, anchor);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			if (/*open*/ ctx[0]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+
+    					if (dirty & /*open*/ 1) {
+    						transition_in(if_block, 1);
+    					}
+    				} else {
+    					if_block = create_if_block(ctx);
+    					if_block.c();
+    					transition_in(if_block, 1);
+    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				}
+    			} else if (if_block) {
+    				group_outros();
+
+    				transition_out(if_block, 1, 1, () => {
+    					if_block = null;
+    				});
+
+    				check_outros();
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (if_block) if_block.d(detaching);
+    			if (detaching) detach(if_block_anchor);
+    		}
+    	};
+    }
+
+    function modalAction(node) {
+    	let fns = [];
+
+    	if (document.body.style.overflow !== "hiddent") {
+    		const original = document.body.style.overflow;
+    		document.body.style.overflow = "hidden";
+    		fns = [...fns, () => document.body.style.overflow = original];
+    	}
+
+    	return { destroy: () => fns.map(fn => fn()) };
+    }
+
+    function instance($$self, $$props, $$invalidate) {
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	let { open = false } = $$props;
+
+    	$$self.$$set = $$props => {
+    		if ("open" in $$props) $$invalidate(0, open = $$props.open);
+    		if ("$$scope" in $$props) $$invalidate(1, $$scope = $$props.$$scope);
+    	};
+
+    	return [open, $$scope, slots];
+    }
+
+    class Modal extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance, create_fragment, safe_not_equal, { open: 0 });
+    	}
+    }
+
+    /* src/App.svelte generated by Svelte v3.28.0 */
+
+    function create_default_slot(ctx) {
+    	let div;
+    	let h1;
+    	let t1;
+    	let h3;
+    	let t3;
+    	let p0;
+    	let t7;
+    	let p1;
+    	let t9;
+    	let p2;
+    	let t12;
+    	let p3;
+    	let t14;
+    	let button;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			div = element("div");
+    			h1 = element("h1");
+    			h1.textContent = "🎉 🎉 Success! 🎉 🎉";
+    			t1 = space();
+    			h3 = element("h3");
+    			h3.textContent = "Sapper + Tailwind CSS Workshop Registration Complete";
+    			t3 = space();
+    			p0 = element("p");
+    			p0.innerHTML = `You have successfully registered for the Sapper + Tailwind CSS Workshop on <b>October 29 and 30</b> from 10am to 1pm EST`;
+    			t7 = space();
+    			p1 = element("p");
+    			p1.textContent = "You will recieve a receipt in your inbox shortly. And on October 28, you will receive information on how to join the workshop to participate.";
+    			t9 = space();
+    			p2 = element("p");
+    			p2.innerHTML = `If you have any questions, please email <a href="mailto:workshops@hyper63.com">workshops@hyper63.com</a>`;
+    			t12 = space();
+    			p3 = element("p");
+    			p3.textContent = "Thank you! We are looking forward to the workshop!";
+    			t14 = space();
+    			button = element("button");
+    			button.textContent = "Close";
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    			append(div, h1);
+    			append(div, t1);
+    			append(div, h3);
+    			append(div, t3);
+    			append(div, p0);
+    			append(div, t7);
+    			append(div, p1);
+    			append(div, t9);
+    			append(div, p2);
+    			append(div, t12);
+    			append(div, p3);
+    			append(div, t14);
+    			append(div, button);
+
+    			if (!mounted) {
+    				dispose = listen(button, "click", /*click_handler*/ ctx[5]);
+    				mounted = true;
+    			}
+    		},
+    		p: noop,
+    		d(detaching) {
+    			if (detaching) detach(div);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    function create_fragment$1(ctx) {
+    	let div;
     	let header;
     	let nav;
     	let t7;
+    	let figure0;
     	let a4;
     	let t8;
     	let main;
@@ -282,20 +870,33 @@ var sapperWorkshop = (function () {
     	let h36;
     	let t89;
     	let section2;
+    	let t93;
+    	let modal;
+    	let current;
     	let mounted;
     	let dispose;
 
+    	modal = new Modal({
+    			props: {
+    				open: /*result*/ ctx[0],
+    				$$slots: { default: [create_default_slot] },
+    				$$scope: { ctx }
+    			}
+    		});
+
     	return {
     		c() {
+    			div = element("div");
     			header = element("header");
     			nav = element("nav");
 
     			nav.innerHTML = `<a href="/">Home</a> 
-    <a href="/sapper-workshop">Sapper Workshop</a> 
-    <a href="/about">About</a> 
-    <a href="https://discord.gg/zcAXBK">Chat</a>`;
+      <a href="/sapper-workshop">Sapper Workshop</a> 
+      <a href="/about">About</a> 
+      <a href="https://discord.gg/zcAXBK">Chat</a>`;
 
     			t7 = space();
+    			figure0 = element("figure");
     			a4 = element("a");
     			a4.innerHTML = `<img src="/sapper-workshop-banner.png" alt="Sapper Workshop Banner"/>`;
     			t8 = space();
@@ -336,41 +937,41 @@ var sapperWorkshop = (function () {
 
     			section0.innerHTML = `<aside><h4>Sapper</h4> 
 
-<ul><li>How to setup a Sapper Project?</li> 
-  <li>Server-Side Rendering</li> 
-  <li>Routing</li> 
-  <li>Authentication and Authorization</li> 
-  <li>Form Management</li> 
-  <li>Svelte Stores</li> 
-  <li>Transitions</li> 
-  <li>End to End Testing</li> 
-  <li>Unit Testing</li></ul></aside> 
-  <aside><h4>Tailwind CSS</h4> 
+  <ul><li>How to setup a Sapper Project?</li> 
+    <li>Server-Side Rendering</li> 
+    <li>Routing</li> 
+    <li>Authentication and Authorization</li> 
+    <li>Form Management</li> 
+    <li>Svelte Stores</li> 
+    <li>Transitions</li> 
+    <li>End to End Testing</li> 
+    <li>Unit Testing</li></ul></aside> 
+    <aside><h4>Tailwind CSS</h4> 
 
-<ul><li>Setting up Tailwind with Sapper</li> 
-  <li>Utility First Concept</li> 
-  <li>Responsive Design</li> 
-  <li>Pseudo-Class variants</li> 
-  <li>Adding base styles</li> 
-  <li>Flexbox</li> 
-  <li>Grid</li> 
-  <li>And more...</li></ul></aside>`;
+  <ul><li>Setting up Tailwind with Sapper</li> 
+    <li>Utility First Concept</li> 
+    <li>Responsive Design</li> 
+    <li>Pseudo-Class variants</li> 
+    <li>Adding base styles</li> 
+    <li>Flexbox</li> 
+    <li>Grid</li> 
+    <li>And more...</li></ul></aside>`;
 
     			t67 = space();
     			section1 = element("section");
 
     			section1.innerHTML = `<aside><h3>Prerequisites</h3> 
 
-<ul><li><a href="https://svelte.dev">Svelte v3 or greater</a></li> 
-  <li><a href="https://nodejs.org">NodeJS v12 or greater</a></li> 
-  <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li> 
-  <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML and CSS</a></li></ul></aside> 
-  <aside><h3>Tools you will need</h3> 
+  <ul><li><a href="https://svelte.dev">Svelte v3 or greater</a></li> 
+    <li><a href="https://nodejs.org">NodeJS v12 or greater</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML and CSS</a></li></ul></aside> 
+    <aside><h3>Tools you will need</h3> 
 
-<ul><li>NodeJS</li> 
-  <li>git</li> 
-  <li>Code Editor</li> 
-  <li>Browser</li></ul></aside>`;
+  <ul><li>NodeJS</li> 
+    <li>git</li> 
+    <li>Code Editor</li> 
+    <li>Browser</li></ul></aside>`;
 
     			t87 = space();
     			h36 = element("h3");
@@ -379,19 +980,23 @@ var sapperWorkshop = (function () {
     			section2 = element("section");
 
     			section2.innerHTML = `<figure><img style="border-radius: 100%" src="/tnw.jpeg" alt="Tom Wilson"/></figure> 
-<p>Tom Wilson has been in the software development industry for over 25 years. Continuous learning and teaching have been a part of his journey. Since 2007, Tom has participated in the tech community hosting and running meetups and providing workshops focused on software development. In 2016, Tom launched a coding school in Charleston, SC, JRS Coding School, focused on full-stack javascript. In 2020, Tom founded hyper63; a company focused on leading engineers from beginner to expert. <a href="https://www.linkedin.com/in/twilson63/">LinkedIn</a></p>`;
+  <p>Tom Wilson has been in the software development industry for over 25 years. Continuous learning and teaching have been a part of his journey. Since 2007, Tom has participated in the tech community hosting and running meetups and providing workshops focused on software development. In 2016, Tom launched a coding school in Charleston, SC, JRS Coding School, focused on full-stack javascript. In 2020, Tom founded hyper63; a company focused on leading engineers from beginner to expert. <a href="https://www.linkedin.com/in/twilson63/">LinkedIn</a></p>`;
 
+    			t93 = space();
+    			create_component(modal.$$.fragment);
     			set_style(button, "float", "right");
     			set_style(section2, "display", "flex");
     			set_style(section2, "flex-direction", "row");
     		},
     		m(target, anchor) {
-    			insert(target, header, anchor);
+    			insert(target, div, anchor);
+    			append(div, header);
     			append(header, nav);
     			append(header, t7);
-    			append(header, a4);
-    			insert(target, t8, anchor);
-    			insert(target, main, anchor);
+    			append(header, figure0);
+    			append(figure0, a4);
+    			append(div, t8);
+    			append(div, main);
     			append(main, button);
     			append(main, t10);
     			append(main, h1);
@@ -421,34 +1026,66 @@ var sapperWorkshop = (function () {
     			append(main, h36);
     			append(main, t89);
     			append(main, section2);
+    			insert(target, t93, anchor);
+    			mount_component(modal, target, anchor);
+    			current = true;
 
     			if (!mounted) {
     				dispose = [
-    					listen(a4, "click", /*startCheckout*/ ctx[0]),
-    					listen(button, "click", /*startCheckout*/ ctx[0])
+    					listen(a4, "click", /*startCheckout*/ ctx[1]),
+    					listen(button, "click", /*startCheckout*/ ctx[1])
     				];
 
     				mounted = true;
     			}
     		},
-    		p: noop,
-    		i: noop,
-    		o: noop,
+    		p(ctx, [dirty]) {
+    			const modal_changes = {};
+    			if (dirty & /*result*/ 1) modal_changes.open = /*result*/ ctx[0];
+
+    			if (dirty & /*$$scope, result*/ 129) {
+    				modal_changes.$$scope = { dirty, ctx };
+    			}
+
+    			modal.$set(modal_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(modal.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(modal.$$.fragment, local);
+    			current = false;
+    		},
     		d(detaching) {
-    			if (detaching) detach(header);
-    			if (detaching) detach(t8);
-    			if (detaching) detach(main);
+    			if (detaching) detach(div);
+    			if (detaching) detach(t93);
+    			destroy_component(modal, detaching);
     			mounted = false;
     			run_all(dispose);
     		}
     	};
     }
 
-    function instance($$self, $$props, $$invalidate) {
+    function instance$1($$self, $$props, $$invalidate) {
     	let stripe = Stripe("pk_test_51HUW8YCdTeU3dtdYIiHByOYhIBsqLN9ImmkfOkbZ1AcIWxQbrVMtfyzqlakNzdVHnlYTU1WXqv52o0fbXKcqFemW00Ig3U26Is");
     	let { sku } = $$props;
     	let { amount } = $$props;
     	let { name } = $$props;
+    	let result;
+
+    	onMount(() => {
+    		const params = new URLSearchParams(window.location.search);
+    		$$invalidate(0, result = params.get("checkout") === "success");
+    		//window.location.replace('/sapper-workshop')
+    	}); /*
+    if (result === 'error') {
+      alert('Error occured while trying to register!')
+      
+      window.location.replace('/sapper-workshop')
+    }
+    */
 
     	async function startCheckout() {
     		const { error } = await stripe.redirectToCheckout({
@@ -459,8 +1096,8 @@ var sapperWorkshop = (function () {
     				}
     			],
     			mode: "payment",
-    			successUrl: window.location.origin + "/sapper-workshop-success",
-    			cancelUrl: window.location.origin + "/sapper-workshop"
+    			successUrl: window.location.origin + "/sapper-workshop?checkout=success",
+    			cancelUrl: window.location.origin + "/sapper-workshop?checkout=error"
     		});
 
     		if (error) {
@@ -468,19 +1105,21 @@ var sapperWorkshop = (function () {
     		}
     	}
 
+    	const click_handler = () => $$invalidate(0, result = false);
+
     	$$self.$$set = $$props => {
-    		if ("sku" in $$props) $$invalidate(1, sku = $$props.sku);
-    		if ("amount" in $$props) $$invalidate(2, amount = $$props.amount);
-    		if ("name" in $$props) $$invalidate(3, name = $$props.name);
+    		if ("sku" in $$props) $$invalidate(2, sku = $$props.sku);
+    		if ("amount" in $$props) $$invalidate(3, amount = $$props.amount);
+    		if ("name" in $$props) $$invalidate(4, name = $$props.name);
     	};
 
-    	return [startCheckout, sku, amount, name];
+    	return [result, startCheckout, sku, amount, name, click_handler];
     }
 
     class App extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance, create_fragment, safe_not_equal, { sku: 1, amount: 2, name: 3 });
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, { sku: 2, amount: 3, name: 4 });
     	}
     }
 
