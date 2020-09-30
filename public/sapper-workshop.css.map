@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "sapper-workshop.css",
+  "sources": [
+    "Modal.svelte"
+  ],
+  "sourcesContent": [
+    "<script>\n  import { scale } from 'svelte/transition'\n  export let open = false;\n\n  function modalAction(node) {\n    let fns = []\n    if (document.body.style.overflow !== 'hiddent') {\n      const original = document.body.style.overflow\n      document.body.style.overflow = 'hidden'\n      fns = [...fns, () => document.body.style.overflow = original]\n    }\n    return {\n      destroy: () => fns.map(fn => fn())\n    }\n  }\n\n</script>\n{#if open}\n<div class=\"modal\" use:modalAction>\n  <section>\n    <aside in:scale out:scale={{duration: 500}}>\n      <slot />\n    </aside>\n  </section>\n</div>\n{/if}\n<style>\n  section {\n    height: 100%;\n    display: grid;\n    place-items: center;\n  }\n  aside {\n    background-color: white;\n  }\n  .modal {\n    position: absolute;\n    background-color: rgba(0, 0, 0, 0.8);\n    top: 0;\n    left: 0;\n    height: 100%;\n    width: 100%;\n  }\n</style>\n"
+  ],
+  "names": [],
+  "mappings": "AA2BE,OAAO,eAAC,CAAC,AACP,MAAM,CAAE,IAAI,CACZ,OAAO,CAAE,IAAI,CACb,WAAW,CAAE,MAAM,AACrB,CAAC,AACD,KAAK,eAAC,CAAC,AACL,gBAAgB,CAAE,KAAK,AACzB,CAAC,AACD,MAAM,eAAC,CAAC,AACN,QAAQ,CAAE,QAAQ,CAClB,gBAAgB,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,CACpC,GAAG,CAAE,CAAC,CACN,IAAI,CAAE,CAAC,CACP,MAAM,CAAE,IAAI,CACZ,KAAK,CAAE,IAAI,AACb,CAAC"
+}
