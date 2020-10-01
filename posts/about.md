@@ -64,3 +64,15 @@ If you want to find more about me check out my linked in profile https://linkedi
 If you would like to chat, join our discord channel here: https://discord.gg/ZycjGC
 
 </main>
+<hr />
+<footer>
+  <div style="display: flex;align-items:center;">
+    <img style="width: 64px;border-radius: 100%;" src="/hyper63-logo.svg" alt="hyper63 logo" />
+    <p style="margin-left: 16px">hyper63</p>
+  </div>
+  <a href="https://twitter.com/hyper632" target="_blank">twitter</a>
+  <a href="https://www.linkedin.com/company/hyper63" target="_blank">linkedin</a>
+  <p><a href="/termsofuse.text">Our Terms of Use</a></p>
+  <p><a href="/privacy.text">Our Privacy Policy</a></p>
+  <p>All rights reserved, hyper63, LLC, &copy; 2020</p>
+</footer>
