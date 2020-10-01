@@ -1,6 +1,7 @@
 import svelte from 'rollup-plugin-svelte'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
+import { terser } from 'rollup-plugin-terser'
 
 export default {
   input: 'src/main.js',
@@ -14,6 +15,7 @@ export default {
       css: css => css.write('sapper-workshop.css')
     }),
     resolve(),
-    commonjs()
+    commonjs(),
+    terser()
   ]
 }
