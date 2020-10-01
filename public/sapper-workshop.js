@@ -833,7 +833,7 @@ var sapperWorkshop = (function () {
     }
 
     function create_fragment$1(ctx) {
-    	let div;
+    	let div1;
     	let header;
     	let nav;
     	let t7;
@@ -872,6 +872,8 @@ var sapperWorkshop = (function () {
     	let t89;
     	let section2;
     	let t93;
+    	let footer;
+    	let t106;
     	let modal;
     	let current;
     	let mounted;
@@ -887,7 +889,7 @@ var sapperWorkshop = (function () {
 
     	return {
     		c() {
-    			div = element("div");
+    			div1 = element("div");
     			header = element("header");
     			nav = element("nav");
 
@@ -984,6 +986,17 @@ var sapperWorkshop = (function () {
   <p>Tom Wilson has been in the software development industry for over 25 years. Continuous learning and teaching have been a part of his journey. Since 2007, Tom has participated in the tech community hosting and running meetups and providing workshops focused on software development. In 2016, Tom launched a coding school in Charleston, SC, JRS Coding School, focused on full-stack javascript. In 2020, Tom founded hyper63; a company focused on leading engineers from beginner to expert. <a href="https://www.linkedin.com/in/twilson63/">LinkedIn</a></p>`;
 
     			t93 = space();
+    			footer = element("footer");
+
+    			footer.innerHTML = `<div style="display: flex;align-items:center;"><img style="width: 64px;border-radius: 100%;" src="/hyper63-logo.svg" alt="hyper63 logo"/> 
+		  <p style="margin-left: 16px">hyper63</p></div> 
+		<a href="https://twitter.com/hyper632" target="_blank">twitter</a> 
+		<a href="https://www.linkedin.com/company/hyper63" target="_blank">linkedin</a> 
+		<p><a href="/termsofuse.text">Our Terms of Use</a></p> 
+		<p><a href="/privacy.text">Our Privacy Policy</a></p> 
+		<p>All rights reserved, hyper63, LLC, © 2020</p>`;
+
+    			t106 = space();
     			create_component(modal.$$.fragment);
     			button.disabled = /*success*/ ctx[0];
     			set_style(button, "float", "right");
@@ -991,14 +1004,14 @@ var sapperWorkshop = (function () {
     			set_style(section2, "flex-direction", "row");
     		},
     		m(target, anchor) {
-    			insert(target, div, anchor);
-    			append(div, header);
+    			insert(target, div1, anchor);
+    			append(div1, header);
     			append(header, nav);
     			append(header, t7);
     			append(header, figure0);
     			append(figure0, a4);
-    			append(div, t8);
-    			append(div, main);
+    			append(div1, t8);
+    			append(div1, main);
     			append(main, button);
     			append(button, t9);
     			append(main, t10);
@@ -1029,7 +1042,9 @@ var sapperWorkshop = (function () {
     			append(main, h36);
     			append(main, t89);
     			append(main, section2);
-    			insert(target, t93, anchor);
+    			append(div1, t93);
+    			append(div1, footer);
+    			insert(target, t106, anchor);
     			mount_component(modal, target, anchor);
     			current = true;
 
@@ -1066,8 +1081,8 @@ var sapperWorkshop = (function () {
     			current = false;
     		},
     		d(detaching) {
-    			if (detaching) detach(div);
-    			if (detaching) detach(t93);
+    			if (detaching) detach(div1);
+    			if (detaching) detach(t106);
     			destroy_component(modal, detaching);
     			mounted = false;
     			run_all(dispose);
