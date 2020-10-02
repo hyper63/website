@@ -61,7 +61,7 @@ I will post short summaries on each one of these principles and why I think they
 
 If you want to find more about me check out my linked in profile https://linkedin.com/in/twilson63.
 
-If you would like to chat, join our discord channel here: https://discord.gg/ZycjGC
+If you would like to chat, join our discord channel here: https://discord.gg/S6VsTqd 
 
 </main>
 <hr />
