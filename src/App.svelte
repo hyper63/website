@@ -47,7 +47,7 @@
       <a href="/">Home</a>
       <a href="/sapper-workshop">Sapper Workshop</a>
       <a href="/about">About</a>
-      <a href="https://discord.gg/zcAXBK">Chat</a>
+      <a href="https://discord.gg/S6VsTqd">Chat</a>
     </nav>
     <figure>
       <a on:click={startCheckout}>
