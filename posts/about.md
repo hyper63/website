@@ -25,12 +25,12 @@ Hi, I am Tom Wilson, and I founded hyper63, a company that is focused on challen
 
 First off, software is amazing, it is truly mind-blowing that we can video chat with anyone in the world in near real-time. It is truly mind-blowing that we have created rockets that can land themselves and global networked trade and commerce. As software developers and engineers we have changed the world. Learning to program computers is being taught in primary education schools. There is also another side of software development.
 
-Software projects can get complicated quickly, and can accrue what we call technical debt which can increase the cost and maintenance of software applications. Developers can quickly find themselves in a maintenance mode, where the amount of work related to keeping the operational becomes a cost burden, and the desire to re-write the whole system is great. Business can require too many features with impossible deadlines and pressure teams into making short-term decisions that produce even more debt. Teams put automation and quality concerns as an item at the bottom of the check list that never gets fully addressed. Developer happiness goes from extremely high to extremely low.
+Software projects can get complicated quickly, and can accrue what we call technical debt which can increase the cost and maintenance of software applications. Developers can quickly find themselves in a maintenance mode, where the amount of work related to keeping the operational becomes a cost burden, and the desire to rewrite the whole system is great. Business can require too many features with impossible deadlines and pressure teams into making short-term decisions that produce even more debt. Teams put automation and quality concerns as an item at the bottom of the check list that never gets fully addressed. Developer happiness goes from extremely high to extremely low.
 
 ## As software developers can we fix this cycle of doom?
 
 * Tell the business to stop asking for features!
-* Start over with a re-write!
+* Start over with a rewrite!
 * Change to a better paradigm, platform, or toolkit?
 * Add more process SCRUM SAFE FTW!
 * Add more resources!
@@ -41,21 +41,21 @@ To be fair, not all projects have this problem, there are unicorns out there, bu
 
 ## What is a better solution?
 
-That is the purpose of hyper63 to find a solution that can create an outcome that keeps technical debt managable and under control. 
+That is the purpose of hyper63 to find a solution that can create an outcome that keeps technical debt manageable and under control so features and scale can flow. 
 
 I believe the solution will involve the following principles:
 
 * Have fun!
 * Define the why and what clearly
 * General purpose over special purpose
-* Automate the SDLC early as possible with CI/CD
+* Automate the SDLC with CI/CD and feature flags
 * Separate Business Rules from Implementation Details
-* Define clear boundaries between your domains
+* Define clear boundaries between your domains and layers
 * Ship code daily, leverage feature flags
 * Constantly learn and grow together as a team
 * Share as much as possible
 
-I will post short summaries on each one fo these principles and why I think they matter!
+I will post short summaries on each one of these principles and why I think they matter!
 
 ## About Tom Wilson
 
