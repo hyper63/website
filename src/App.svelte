@@ -6,9 +6,15 @@
   let stripe = Stripe('pk_live_51HUW8YCdTeU3dtdYnYrJyb6F7TYLWWtNk6vHov8Q06cQ2hDKaNqhbI2mGjPcQqN7PjxQn2rhCEhmOaIVeAlPPiVV001vP95oUK')
 
   let success = false
+  let price = '1HXBu9CdTeU3dtdYKEV46A0m'
+  let cost = '$100'
 
   onMount(() => {
     const params = new URLSearchParams(window.location.search)
+    if (params.get('code') === 'SVELTE101') {
+      price = '1HXoefCdTeU3dtdYogGAafWD' 
+      cost = "$25"
+    }
     if (params.get('checkout') === 'success') {
       //window.location.replace('/sapper-workshop')
       success = true
@@ -18,7 +24,7 @@
   async function startCheckout() {
     const { error } = await stripe.redirectToCheckout({
       // test lineItems: [{price: 'price_1HWph3CdTeU3dtdYoULHTDCw', quantity: 1}],
-      lineItems: [{ price: 'price_1HXBu9CdTeU3dtdYKEV46A0m', quantity: 1}],
+      lineItems: [{ price: `price_${price}`, quantity: 1}],
       mode: 'payment',
       successUrl: window.location.origin + '/sapper-workshop?checkout=success',
       cancelUrl: window.location.origin + '/sapper-workshop?checkout=error'
@@ -50,7 +56,12 @@
     </figure>
   </header>
   <main>
-    <button disabled={success} on:click={startCheckout} style="float: right">Register: $100</button>
+    <div style="float: right">
+      <button disabled={success} on:click={startCheckout}>Register: {cost}</button>
+      {#if cost === '$25'}
+        <div>$100 value</div>
+      {/if}
+    </div>
   <h1>Sapper + TailwindCSS Workshop</h1>
   <p>October 29 and 30 from 10am to 1pm EST each day</p>
 
