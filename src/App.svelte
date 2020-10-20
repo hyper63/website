@@ -42,14 +42,21 @@
 </script>
 
 <div>
-  <header>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/sapper-workshop">Sapper Workshop</a>
-      <a href="/about">About</a>
-      <a href="https://discord.gg/S6VsTqd">Chat</a>
-    </nav>
-  </header>
+	<header>
+		<nav>
+			<a href="/">
+				<div style="display: flex;align-items: center;">
+					<img src="/hyper63-icon.svg" alt="logo" style="margin-right: 20px;" /> 
+					<div>hyper63</div>
+				</div>
+			</a>
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="/about">About</a></li>
+				<li><a href="https://discord.gg/S6VsTqd">Chat</a></li>
+			</ul>
+		</nav>
+	</header>
   <main>
     <div style="font-size: 3em; color: red;margin: 20px;">Event is cancelled!</div>
     <div style="float: right">

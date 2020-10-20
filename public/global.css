@@ -172,6 +172,11 @@ nav ul li ul li a {
     display: block;
 }
 
+/* footer */
+footer {
+    font-size: .7em;
+}
+
 /* Typography */
 code,
 samp {

@@ -6,18 +6,23 @@ css: /global.css
 
 <header>
   <nav>
-    <a href="/">Home</a>
-    <a href="/about">About</a>
+    <a href="/">
+      <div style="display: flex;align-items: center;">
+        <img src="/hyper63-icon.svg" alt="logo" style="margin-right: 20px;" /> 
+        <div>hyper63</div>
+      </div>
+    </a>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="https://discord.gg/S6VsTqd">Chat</a></li>
+    </ul>
   </nav>
+  <h1>A <u>different</u> approach to software</h1>
 </header>
 <main>
 
-<img alt="logo" src="hyper63-icon.svg" />
-<br />
-<a href="/">
-  <h1>about hyper63</h1>
-</a>
-<h1>A <u>different</u> approach to software</h1>
+<h1>about hyper63</h1>
 
 Hi, I am Tom Wilson, and I founded hyper63, a company that is focused on challenging the way we currently think and do software development. I have been writing software for 30 years and have helped build some complex and successful software systems. 
 
