@@ -49,15 +49,11 @@
       <a href="/about">About</a>
       <a href="https://discord.gg/S6VsTqd">Chat</a>
     </nav>
-    <figure>
-      <a on:click={startCheckout}>
-        <img src="/sapper-workshop-banner.png" alt="Sapper Workshop Banner" />
-      </a>
-    </figure>
   </header>
   <main>
+    <div style="font-size: 3em; color: red;margin: 20px;">Event is cancelled!</div>
     <div style="float: right">
-      <button disabled={success} on:click={startCheckout}>Register: {cost}</button>
+      <button disabled={true} on:click={startCheckout}>Register: {cost}</button>
       {#if cost === '$25'}
         <div>$100 value</div>
       {/if}
