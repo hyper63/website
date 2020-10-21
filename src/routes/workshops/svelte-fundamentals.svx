@@ -1,0 +1,61 @@
+<svelte:head>
+
+  <title>hyper63 - Svelte Fundamentals</title>
+</svelte:head>
+<style>
+  section {
+    display: flex;
+    flex-direction: row;
+  }
+</style>
+
+# Svelte Fundamentals Workshop
+
+<section>
+  <figure>
+    <img src="https://placehold.it/400x300" alt="video" />
+  </figure>
+  
+  <aside>
+
+    ## Date, Time and Location
+
+    October 29, 2020
+    10 am - 1pm EST
+    Virtual Workshop
+
+    <a href="#"><b>Register $25</b></a>
+
+  </aside>
+</section>
+
+## Description
+
+Join Tom Wilson of hyper63 for a 3-hour workshop learning Svelte, a web framework that provides both a great developer experience and a great user experience. Svelte is the web framework that gets out of the way, literally it is a compiler and only ships a tiny footprint to the browser. Learn a different approach to frontend development. https://svelte.dev
+
+## Learning Objectives
+
+In this workshop you will learn:
+
+- the basics of components
+- reactivity
+- stores
+- actions
+- transitions
+- unit testing
+
+## Prerequisites
+
+In order to get the best experience you should:
+
+- know html, css, and javascript
+- know git
+- have NodeJS v12+ installed https://nodejs.org
+- have a code editor https://code.visualstudio.com
+- _recommended_ to use two monitors, one for video and one for your working area
+
+## About the Instructor
+
+Tom Wilson has been in the software development industry for over 25 years. Continuous learning and teaching have been a part of his journey. Since 2007, Tom has participated in the tech community hosting and running meetups and providing workshops focused on software development. In 2016, Tom launched a coding school in Charleston, SC, JRS Coding School, focused on full-stack javascript. In 2020, Tom founded hyper63; a company focused on leading engineers from beginner to expert.
+
+<a href="#"><b>{'Register \$25'}</b></a>

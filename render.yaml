@@ -3,12 +3,12 @@ services:
     name: website
     env: static
     branch: master
-    buildCommand: yarn
-    staticPublishPath: ./public
+    buildCommand: yarn && yarn export
+    staticPublishPath: ./__sapper__/export
     pullRequestPreviewsEnabled: true     
   - type: web
     name: website-staging
     env: static
     branch: staging
-    buildCommand: yarn
-    staticPublishPath: ./public
+    buildCommand: yarn && yarn export
+    staticPublishPath: ./__sapper__/export
