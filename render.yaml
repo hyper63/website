@@ -10,5 +10,5 @@ services:
     name: website-staging
     env: static
     branch: staging
-    buildCommand: yarn && yarn export
+    buildCommand: yarn export
     staticPublishPath: ./__sapper__/export
