@@ -1,7 +1,47 @@
+<script>
+  import { loadStripe } from '@stripe/stripe-js'
+  import { onMount, tick } from 'svelte'
+  import Modal from '../../components/Modal.svelte'
+
+  let stripe 
+  let success = false
+  let price = '1HelHkCdTeU3dtdYd478QDZd'
+  let cost = '$25'
+
+  onMount(async () => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('checkout') === 'success') {
+      success = true
+    }
+    stripe = await loadStripe(process.env.STRIPE)
+
+  })
+
+  async function startCheckout() {
+    const {error} = await stripe.redirectToCheckout({
+      lineItems: [{price: `price_${price}`, quantity: 1}],
+      mode: 'payment',
+      successUrl: window.location.origin + '/workshops/svelte-fundamentals?checkout=success',
+      cancelUrl: window.location.origin + '/workshops/svelte-fundamentals?checkout=error'
+    })
+
+    if (error) {
+      alert('our payment system is not responding')
+    }
+  }
+
+  function closeModal() {
+    success = false
+    window.location.replace('/workshops/svelte-fundamentals')
+  }
+</script>
+
 <svelte:head>
 
   <title>hyper63 - Svelte Fundamentals</title>
+
 </svelte:head>
+
 <style>
   section {
     display: flex;
@@ -20,11 +60,11 @@
 
     ## Date, Time and Location
 
-    October 29, 2020
+    Friday, November 6, 2020
     10 am - 1pm EST
     Virtual Workshop
 
-    <a href="#"><b>Register $25</b></a>
+    <button disabled={success} on:click={startCheckout}>Register $25</button>
 
   </aside>
 </section>
@@ -58,4 +98,16 @@ In order to get the best experience you should:
 
 Tom Wilson has been in the software development industry for over 25 years. Continuous learning and teaching have been a part of his journey. Since 2007, Tom has participated in the tech community hosting and running meetups and providing workshops focused on software development. In 2016, Tom launched a coding school in Charleston, SC, JRS Coding School, focused on full-stack javascript. In 2020, Tom founded hyper63; a company focused on leading engineers from beginner to expert.
 
-<a href="#"><b>{'Register \$25'}</b></a>
+<button disabled={success} on:click={startCheckout}>{'Register \$25'}</button>
+
+<Modal open={success}>
+  <div>
+    <h1> 🎉 🎉 Success! 🎉 🎉</h1>
+    <h3>Svelte Fundamentals Workshop Registration Complete</h3>
+    <p>You have successfully registered for the Svelte Fundamentals Workshop on <b>Nov 6</b> from 10am to 1pm EST</p>
+    <p>You will recieve a receipt in your inbox shortly. And on Nov 5, you will receive information on how to join the workshop to participate.</p>
+    <p>If you have any questions, please email <a href="mailto:workshops@hyper63.com">workshops@hyper63.com</a></p>
+    <p>Thank you! We are looking forward to the workshop!</p>
+    <button on:click={closeModal}>Close</button>
+  </div>
+</Modal>

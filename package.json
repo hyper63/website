@@ -9,7 +9,9 @@
     "start": "node __sapper__/build"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^1.10.0",
     "compression": "^1.7.1",
+    "dotenv": "^8.2.0",
     "polka": "next",
     "sirv": "^1.0.0"
   },
@@ -21,6 +23,7 @@
     "@babel/runtime": "^7.0.0",
     "@rollup/plugin-babel": "^5.0.0",
     "@rollup/plugin-commonjs": "^14.0.0",
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^8.0.0",
     "@rollup/plugin-replace": "^2.2.0",
     "@rollup/plugin-url": "^5.0.0",
