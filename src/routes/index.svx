@@ -39,4 +39,4 @@
 
 hyper63 is a gateway API that provides a set of common service interfaces that applications need like data, cache, storage, hooks, etc. These interfaces connect to your favorite platforms using adapters. By using hyper63 as your service boundary you application can change from one backend to another without having to change your applications code base.
 
-[<b>Learn More</b>](https://github.com/hyper63/atlas)
+[<b>Learn More</b>](https://github.com/hyper63/hyper63)
