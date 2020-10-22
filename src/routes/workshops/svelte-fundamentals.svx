@@ -2,6 +2,7 @@
   import { loadStripe } from '@stripe/stripe-js'
   import { onMount, tick } from 'svelte'
   import Modal from '../../components/Modal.svelte'
+  import TwitterCard from '../../components/TwitterCard.svelte'
 
   let stripe 
   let success = false
@@ -42,6 +43,12 @@
 <svelte:head>
 
   <title>hyper63 - Svelte Fundamentals</title>
+  <TwitterCard
+    url="/workshops/svelte-fundamentals"
+    title="Svelte Fundamentals Workshop"
+    description="Learn the fundamentals by building a single page application"
+    image="svelte-fundamentals.workshop.png"
+  />
 
 </svelte:head>
 
@@ -55,7 +62,7 @@
 # Svelte Fundamentals Workshop
 
 <section>
-  <object width="425" height="300">
+  <object width="425" height="300" title="youtube video">
     <param name="movie" value="https://www.youtube.com/v/V7w1QgNlobA&hl=en&fs=1" />
     <param name="allowFullScreen" value="true" />
     <embed src="https://www.youtube.com/v/V7w1QgNlobA&hl=en&fs=1" type="application/x-shockwave-flash" allowfullscreen="true" width="425" height="300" />
