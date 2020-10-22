@@ -4,6 +4,7 @@
   import Modal from '../../components/Modal.svelte'
   import TwitterCard from '../../components/TwitterCard.svelte'
   import OgCard from '../../components/OgCard.svelte'
+  import Youtube from '../../components/Youtube.svelte'
 
   let stripe 
   let success = false
@@ -69,12 +70,7 @@
 # Svelte Fundamentals Workshop
 
 <section>
-  <object width="425" height="300" title="youtube video">
-    <param name="movie" value="https://www.youtube.com/v/V7w1QgNlobA&hl=en&fs=1" />
-    <param name="allowFullScreen" value="true" />
-    <embed src="https://www.youtube.com/v/V7w1QgNlobA&hl=en&fs=1" type="application/x-shockwave-flash" allowfullscreen="true" width="425" height="300" />
-  </object>
-  
+  <Youtube video="xvWdUrVzGFg" />
   <aside>
 
     ## Date, Time and Location
