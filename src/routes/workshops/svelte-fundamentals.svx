@@ -10,6 +10,9 @@
 
   onMount(async () => {
     const params = new URLSearchParams(window.location.search)
+    if (window.location.hostname === 'hyper63.com') {
+      price = '1Hf21uCdTeU3dtdYCoKPeX5Q'
+    }
     if (params.get('checkout') === 'success') {
       success = true
     }
