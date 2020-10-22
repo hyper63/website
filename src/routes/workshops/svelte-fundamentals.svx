@@ -49,7 +49,7 @@
     url="/workshops/svelte-fundamentals"
     title="Svelte Fundamentals Workshop"
     description="Learn the fundamentals by building a single page application"
-    image="/svelte-fundamentals.workshop.png"
+    image="https://hyper63.com/svelte-fundamentals.workshop.png"
   />
 
 <OgCard
