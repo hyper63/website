@@ -7,7 +7,7 @@ services:
     staticPublishPath: ./__sapper__/export
     pullRequestPreviewsEnabled: true     
     envVars:
-    - key: STRIPE_KEY
+    - key: STRIPE
       value: pk_live_51HUW8YCdTeU3dtdYnYrJyb6F7TYLWWtNk6vHov8Q06cQ2hDKaNqhbI2mGjPcQqN7PjxQn2rhCEhmOaIVeAlPPiVV001vP95oUK
   - type: web
     name: website-staging
@@ -16,5 +16,5 @@ services:
     buildCommand: yarn export
     staticPublishPath: ./__sapper__/export
     envVars:
-    - key: STRIPE_KEY
+    - key: STRIPE
       value: pk_test_51HUW8YCdTeU3dtdYIiHByOYhIBsqLN9ImmkfOkbZ1AcIWxQbrVMtfyzqlakNzdVHnlYTU1WXqv52o0fbXKcqFemW00Ig3U26Is
