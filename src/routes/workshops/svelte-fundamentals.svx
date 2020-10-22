@@ -1,0 +1,118 @@
+<script>
+  import { loadStripe } from '@stripe/stripe-js'
+  import { onMount, tick } from 'svelte'
+  import Modal from '../../components/Modal.svelte'
+
+  let stripe 
+  let success = false
+  let price = '1HelHkCdTeU3dtdYd478QDZd'
+  let cost = '$25'
+
+  onMount(async () => {
+    const params = new URLSearchParams(window.location.search)
+    if (window.location.hostname === 'hyper63.com') {
+      price = '1Hf21uCdTeU3dtdYCoKPeX5Q'
+    }
+    if (params.get('checkout') === 'success') {
+      success = true
+    }
+    stripe = await loadStripe(process.env.STRIPE)
+
+  })
+
+  async function startCheckout() {
+    const {error} = await stripe.redirectToCheckout({
+      lineItems: [{price: `price_${price}`, quantity: 1}],
+      mode: 'payment',
+      successUrl: window.location.origin + '/workshops/svelte-fundamentals?checkout=success',
+      cancelUrl: window.location.origin + '/workshops/svelte-fundamentals?checkout=error'
+    })
+
+    if (error) {
+      alert('our payment system is not responding')
+    }
+  }
+
+  function closeModal() {
+    success = false
+    window.location.replace('/workshops/svelte-fundamentals')
+  }
+</script>
+
+<svelte:head>
+
+  <title>hyper63 - Svelte Fundamentals</title>
+
+</svelte:head>
+
+<style>
+  section {
+    display: flex;
+    flex-direction: row;
+  }
+</style>
+
+# Svelte Fundamentals Workshop
+
+<section>
+  <object width="425" height="300">
+    <param name="movie" value="https://www.youtube.com/v/V7w1QgNlobA&hl=en&fs=1" />
+    <param name="allowFullScreen" value="true" />
+    <embed src="https://www.youtube.com/v/V7w1QgNlobA&hl=en&fs=1" type="application/x-shockwave-flash" allowfullscreen="true" width="425" height="300" />
+  </object>
+  
+  <aside>
+
+    ## Date, Time and Location
+
+    Friday, November 6, 2020
+    10 am - 1pm EST
+    Virtual Workshop
+
+    <button disabled={success} on:click={startCheckout}>Register $25</button>
+
+  </aside>
+</section>
+
+## Description
+
+Join Tom Wilson of hyper63 for a 3-hour workshop learning Svelte, a web framework that provides both a great developer experience and a great user experience. Svelte is the web framework that gets out of the way, literally it is a compiler and only ships a tiny footprint to the browser. Learn a different approach to frontend development. https://svelte.dev
+
+## Learning Objectives
+
+In this workshop you will learn:
+
+- the basics of components
+- reactivity
+- stores
+- actions
+- transitions
+- unit testing
+
+## Prerequisites
+
+In order to get the best experience you should:
+
+- know html, css, and javascript
+- know git
+- have NodeJS v12+ installed https://nodejs.org
+- have a code editor https://code.visualstudio.com
+- _recommended_ to use two monitors, one for video and one for your working area
+
+## About the Instructor
+
+Tom Wilson has been in the software development industry for over 25 years. Continuous learning and teaching have been a part of his journey. Since 2007, Tom has participated in the tech community hosting and running meetups and providing workshops focused on software development. In 2016, Tom launched a coding school in Charleston, SC, JRS Coding School, focused on full-stack javascript. In 2020, Tom founded hyper63; a company focused on leading engineers from beginner to expert.
+
+<button disabled={success} on:click={startCheckout}>{'Register \$25'}</button>
+
+<Modal open={success}>
+  <div>
+    <h1> 🎉 🎉 Success! 🎉 🎉</h1>
+    <h3>Svelte Fundamentals Workshop Registration Complete</h3>
+    <p>You have successfully registered for the Svelte Fundamentals Workshop on <b>Nov 6</b> from 10am to 1pm EST</p>
+    <p>You will recieve a receipt in your inbox shortly. And on Nov 5, you will receive information on how to join the workshop to participate.</p>
+    <p>If you have any questions, please email <a href="mailto:workshops@hyper63.com">workshops@hyper63.com</a></p>
+    <p>Thank you! We are looking forward to the workshop!</p>
+    <button on:click={closeModal}>Close</button>
+  </div>
+</Modal>
