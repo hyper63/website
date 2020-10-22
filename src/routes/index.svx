@@ -28,7 +28,11 @@
 
 <svelte:head>
 
-<title>hyper63 - a service-gateway</title>
+  <title>hyper63 - a service-gateway</title>
+  <meta name="title" content="hyper63">
+
+  <meta name="description" content="create future-proof applications with hyper63 service gateway">
+
 </svelte:head>
 
 # create future-proof applications with <u>hyper63</u> service gateway
