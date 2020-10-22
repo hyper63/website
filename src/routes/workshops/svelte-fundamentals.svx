@@ -52,9 +52,11 @@
 # Svelte Fundamentals Workshop
 
 <section>
-  <figure>
-    <img src="https://placehold.it/400x300" alt="video" />
-  </figure>
+  <object width="425" height="300">
+    <param name="movie" value="https://www.youtube.com/v/V7w1QgNlobA&hl=en&fs=1" />
+    <param name="allowFullScreen" value="true" />
+    <embed src="https://www.youtube.com/v/V7w1QgNlobA&hl=en&fs=1" type="application/x-shockwave-flash" allowfullscreen="true" width="425" height="300" />
+  </object>
   
   <aside>
 
