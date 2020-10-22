@@ -8,9 +8,17 @@
 		padding: 0;
 		list-style: none;
 	}
+
 	img {
 		border-radius: 8px;
-		height: 400px;
+		height: 300px;
+		width: 100%;
+	}
+
+	@media (min-width: 480px) {
+		img {
+			width: 400px;
+		}
 	}
 </style>
 
