@@ -29,9 +29,6 @@
 <h1>Upcoming Workshops</h1>
 
 <ul>
-	<li><a rel="prefetch" href="workshops/svelte-fundamentals">
-		<img src="/svelte-fundamentals.workshop.png" alt="svelte fundamentals" />
-	</a></li>
-  
+  <li>No Workshops scheduled at this time.</li> 
 </ul>
 
