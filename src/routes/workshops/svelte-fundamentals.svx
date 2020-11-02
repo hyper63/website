@@ -67,7 +67,7 @@
   }
 </style>
 
-# Svelte Fundamentals Workshop
+# Svelte Fundamentals Workshop <span style="color:red">CANCELLED</span>
 
 <section>
   <Youtube video="xvWdUrVzGFg" />
@@ -79,7 +79,7 @@
     10 am - 1pm EST
     Virtual Workshop
 
-    <button disabled={success} on:click={startCheckout}>Register $25</button>
+    <button disabled={true} on:click={startCheckout}>Register $25</button>
 
   </aside>
 </section>
@@ -113,7 +113,7 @@ In order to get the best experience you should:
 
 Tom Wilson has been in the software development industry for over 25 years. Continuous learning and teaching have been a part of his journey. Since 2007, Tom has participated in the tech community hosting and running meetups and providing workshops focused on software development. In 2016, Tom launched a coding school in Charleston, SC, JRS Coding School, focused on full-stack javascript. In 2020, Tom founded hyper63; a company focused on leading engineers from beginner to expert.
 
-<button disabled={success} on:click={startCheckout}>{'Register \$25'}</button>
+<button disabled={true} on:click={startCheckout}>{'Register \$25'}</button>
 
 <Modal open={success}>
   <div>
