@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title><%= title %></title>
+    <meta name="description" content="<%= description %>">
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<%= page.url %>">
+    <meta property="og:title" content="<%= title %>">
+    <meta property="og:description" content="<%= description %>">
+    <meta property="og:image" content="<%= card %>">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="hyper63">
+    <meta name="twitter:creator" content="@twilson63">
+    <meta name="twitter:title" content="<%= title %>">
+    <meta name="twitter:description" content="<%= description %>">    
+    <meta name="twitter:image" content="<%= card %>">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="/css/styles.css">
+  </head>
+  <body>
+    <div class="relative bg-gray-50 overflow-hidden">
+      <div class="hidden sm:block sm:absolute sm:inset-y-0 sm:h-full sm:w-full" aria-hidden="true">
+        <div class="relative h-full max-w-7xl mx-auto">
+        </div>
+      </div>
+
+      <div class="relative pt-6 pb-16 sm:pb-24">
+        <%- include menu.ejs %>
+        <%- content %>
+      </div>
+    </div>
+    <%- include footer.ejs %>
+
+  </body>
+</html>
+

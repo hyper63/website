@@ -1,0 +1,227 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>hyper63 - faq</title>
+    <meta name="description" content="frequently asked questions for hyper63">
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="/faq/">
+    <meta property="og:title" content="hyper63 - faq">
+    <meta property="og:description" content="frequently asked questions for hyper63">
+    <meta property="og:image" content="/img/hyper63-card.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="hyper63">
+    <meta name="twitter:creator" content="@twilson63">
+    <meta name="twitter:title" content="hyper63 - faq">
+    <meta name="twitter:description" content="frequently asked questions for hyper63">    
+    <meta name="twitter:image" content="/img/hyper63-card.png">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="/css/styles.css">
+  </head>
+  <body>
+    <div class="relative bg-gray-50 overflow-hidden">
+      <div class="hidden sm:block sm:absolute sm:inset-y-0 sm:h-full sm:w-full" aria-hidden="true">
+        <div class="relative h-full max-w-7xl mx-auto">
+        </div>
+      </div>
+
+      <div class="relative pt-6 pb-16 sm:pb-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+  <nav class="relative flex items-center justify-between sm:h-10 md:justify-center" aria-label="Global">
+    <div class="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
+      <div class="flex items-center justify-between w-full md:w-auto">
+        <a href="/">
+          <span class="sr-only">Workflow</span>
+          <img class="h-8 w-auto sm:h-10" src="/img/hyper63-logo.png" alt="">
+        </a>
+        <div class="-mr-2 flex items-center md:hidden">
+          <button type="button" class="bg-gray-50 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" id="main-menu" aria-haspopup="true">
+            <span class="sr-only">Open main menu</span>
+            <!-- Heroicon name: menu -->
+            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="hidden md:flex md:space-x-10">
+      <a href="/product" class="font-medium text-gray-500 hover:text-gray-900">Product</a>
+
+      <a href="/features" class="font-medium text-gray-500 hover:text-gray-900">Features</a>
+
+      <a href="/faq" class="font-medium text-gray-500 hover:text-gray-900">FAQ</a>
+
+      <a href="/about" class="font-medium text-gray-500 hover:text-gray-900">Company</a>
+    </div>
+    <div class="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
+      <span class="inline-flex rounded-md shadow">
+        <a href="https://api-docs.hyper63.com" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-yellow-600 bg-white hover:bg-gray-50">
+          API Docs 
+        </a>
+      </span>
+    </div>
+  </nav>
+</div>
+
+<!--
+  Mobile menu, show/hide based on menu open state.
+
+  Entering: "duration-150 ease-out"
+    From: "opacity-0 scale-95"
+    To: "opacity-100 scale-100"
+  Leaving: "duration-100 ease-in"
+    From: "opacity-100 scale-100"
+    To: "opacity-0 scale-95"
+-->
+<div id="menu" class="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden hidden">
+  <div class="rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden">
+    <div class="px-5 pt-4 flex items-center justify-between">
+      <div>
+        <img class="h-8 w-auto" src="img/hyper63-logo.png" alt="">
+      </div>
+      <div class="-mr-2">
+        <button id="close-btn" type="button" class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-500">
+          <span class="sr-only">Close menu</span>
+          <!-- Heroicon name: x -->
+          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div role="menu" aria-orientation="vertical" aria-labelledby="main-menu">
+      <div class="px-2 pt-2 pb-3" role="none">
+        <a href="/product" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50" role="menuitem">Product</a>
+
+        <a href="/features" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50" role="menuitem">Features</a>
+
+        <a href="/faq" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50" role="menuitem">FAQ</a>
+
+        <a href="/about" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50" role="menuitem">Company</a>
+      </div>
+      <div role="none">
+        <a href="https://api-docs.hyper63.com" class="block w-full px-5 py-3 text-center font-medium text-yellow-600 bg-gray-50 hover:bg-gray-100" role="menuitem">
+          API Docs 
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function showMenu() {
+  document.getElementById('menu').classList.remove('hidden')  
+}
+function hideMenu() {
+  document.getElementById('menu').classList.add('hidden')
+}
+document.getElementById('main-menu').addEventListener('click', showMenu)
+document.getElementById('close-btn').addEventListener('click', hideMenu)
+</script>
+
+
+        <!-- This example requires Tailwind CSS v2.0+ -->
+<div class="bg-white">
+  <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
+    <div class="lg:grid lg:grid-cols-3 lg:gap-8">
+      <div>
+        <h2 class="text-3xl font-extrabold text-gray-900">
+          Frequently asked questions
+        </h2>
+        <p class="mt-4 text-lg text-gray-500">Can’t find the answer you’re looking for? Reach out to our <a href="mailto:support@hyper63.com" class="font-medium text-yellow-600 hover:text-yellow-500">customer support</a> team.</p>
+      </div>
+      <div class="mt-12 lg:mt-0 lg:col-span-2">
+        <dl class="space-y-12">
+          <div>
+            <dt class="text-lg leading-6 font-medium text-gray-900">
+              What is hyper63?
+            </dt>
+            <dd class="mt-2 text-base text-gray-500">
+              hyper63 is an open-source service framework that provides a common service boundary between an applications business logic and its service implementation details.
+            </dd>
+          </div>
+
+          <div>
+            <dt class="text-lg leading-6 font-medium text-gray-900">
+              When should I use hyper63?
+            </dt>
+            <dd class="mt-2 text-base text-gray-500">
+              <h5 class="mt-2 mb-2 font-medium">hyper63 works great for greenfield, prototypes and migration applications</h5>
+              <ul class="list-disc">
+                <li>
+                  <span class="font-medium">GREENFIELD:</span> hyper63 can give the team a boost in productivity 
+                  while encouraging separation between core business logic and service implementation details.
+                </li>
+                <li>
+                  <span class="font-medium">PROTOTYPES:</span> with one command you can start a hyper63 development service and be up and coding.
+                </li>
+                <li>
+                  <span class="font-medium">MIGRATIONS:</span> migrate a legacy application to a more scalable architecture and extendible architecture.
+                </li>
+              </ul>
+            </dd>
+          </div>
+
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+      </div>
+    </div>
+    <footer class="bg-white">
+  <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
+    <nav class="-mx-5 -my-2 flex flex-wrap justify-center" aria-label="Footer">
+      <div class="px-5 py-2">
+        <a href="/about" class="text-base text-gray-500 hover:text-gray-900">
+          About
+        </a>
+      </div>
+
+      <div class="px-5 py-2">
+        <a href="https://hyper63.substack.com/" class="text-base text-gray-500 hover:text-gray-900">
+          Blog
+        </a>
+      </div>
+
+      <div class="px-5 py-2">
+        <a href="/service" class="text-base text-gray-500 hover:text-gray-900">
+          Terms of Service 
+        </a>
+      </div>
+      <div class="px-5 py-2">
+        <a href="/privacy" class="text-base text-gray-500 hover:text-gray-900">
+          Privacy Policy 
+        </a>
+      </div>
+    </nav>
+    <div class="mt-8 flex justify-center space-x-6">
+
+      <a href="https://twitter.com/hyper632" class="text-gray-400 hover:text-gray-500">
+        <span class="sr-only">Twitter</span>
+        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+        </svg>
+      </a>
+
+      <a href="https://github.com/hyper63" class="text-gray-400 hover:text-gray-500">
+        <span class="sr-only">GitHub</span>
+        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+        </svg>
+      </a>
+
+    </div>
+    <p class="mt-8 text-center text-base text-gray-400">
+    &copy; 2021 hyper63, LLC. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+  </body>
+</html>
+
