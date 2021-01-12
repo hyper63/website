@@ -3,18 +3,12 @@ services:
     name: website
     env: static
     branch: master
-    buildCommand: yarn export
-    staticPublishPath: ./__sapper__/export
-    pullRequestPreviewsEnabled: true     
-    envVars:
-    - key: STRIPE
-      value: pk_live_51HUW8YCdTeU3dtdYnYrJyb6F7TYLWWtNk6vHov8Q06cQ2hDKaNqhbI2mGjPcQqN7PjxQn2rhCEhmOaIVeAlPPiVV001vP95oUK
+    buildCommand: yarn build
+    staticPublishPath: ./public
+    pullRequestPreviewsEnabled: true
   - type: web
     name: website-staging
     env: static
     branch: staging
-    buildCommand: yarn export
-    staticPublishPath: ./__sapper__/export
-    envVars:
-    - key: STRIPE
-      value: pk_test_51HUW8YCdTeU3dtdYIiHByOYhIBsqLN9ImmkfOkbZ1AcIWxQbrVMtfyzqlakNzdVHnlYTU1WXqv52o0fbXKcqFemW00Ig3U26Is
+    buildCommand: yarn build
+    staticPublishPath: ./public
