@@ -12,6 +12,9 @@ text:
     Let your development teams focus on creating applications that solve the problems of the business, let hyper63 solve the problems of the cloud.
 ---
 <main class="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
+<main>
+  <div class="py-12 bg-white">
+    <div class="mx-auto max-w-7xl px-4 sm:mt-24">
   <div class="text-center">
     <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
       <%- text.tagline %>
@@ -21,7 +24,6 @@ text:
     </p>
     <figure class="max-w-md mx-auto mt-5 hidden md:block">
       <img src="img/hyper63-config-img.svg" class="rounded-md" >
-
     </figure>
     <div class="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
       <div class="rounded-md shadow">
@@ -35,5 +37,19 @@ text:
         </a>
       </div>
     </div>
+  </div>
+    </div>
+  </div>
+  <div id="product" class="py-12 bg-gray-50">
+    <%- include /product.ejs %>
+  </div>
+  <div id="features" class="py-12 bg-white">
+    <%- include /features.ejs %>
+  </div>
+  <div id="faq" class="py-12 bg-gray-50">
+    <%- include /faq.ejs %>
+  </div>
+  <div id="about" class="py-12 bg-white">
+    <%- include /about.ejs %>
   </div>
 </main>
