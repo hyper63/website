@@ -17,6 +17,7 @@
     "build-css": "postcss src/css/tailwind.css > src/css/styles.css",
     "build-html": "eleventy",
     "build": "run-s build-css build-html",
-    "serve": "eleventy --serve"
+    "serve": "eleventy --serve",
+    "serve-watch": "eleventy --serve --watch"
   }
 }

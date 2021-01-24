@@ -26,14 +26,14 @@
         <div class="relative h-full max-w-7xl mx-auto">
         </div>
       </div>
-
-      <div class="relative pb-16 sm:pb-24">
-        <%- include menu.ejs %>
+      <div class="relative">
+        <% if (!menu.hideBase) { %>
+          <%- include('/menu.ejs', { anchor: '/' }) %>
+        <% } %>
         <%- content %>
       </div>
     </div>
     <%- include footer.ejs %>
-
   </body>
 </html>
 
